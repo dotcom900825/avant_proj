@@ -18,4 +18,5 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require backbone/avantgarde
+//= require d3
 //= require_tree .
