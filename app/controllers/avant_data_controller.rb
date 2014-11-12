@@ -10,4 +10,11 @@ class AvantDataController < ApplicationController
       format.json
     end
   end
+
+  def time_data
+    @data = AvantData.select(:enrollment_date, :first_pos_hiv, :date_curr, :sequence_id, :primary_study_id, :baseline_age, :gender, :martial_status, :sexual_orientation, :education, :zip)
+    respond_to do |format|
+      format.json
+    end
+  end
 end
