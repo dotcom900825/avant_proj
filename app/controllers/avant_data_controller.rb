@@ -1,5 +1,5 @@
 class AvantDataController < ApplicationController
-  def index
+  def gender
     @data = AvantData.all
 
     @male = [@data.gender(0).age(20, 30), @data.gender(0).age(30, 40), @data.gender(0).age(40, 50), @data.gender(0).age(50, 60), @data.gender(0).age(60, 70) ].map {|ele| ele.count}
@@ -16,5 +16,16 @@ class AvantDataController < ApplicationController
     respond_to do |format|
       format.json
     end
+  end
+
+  def circle_packing
+    @ethnicities = AvantData.pluck(:ethnicity).uniq.reject {|item| [nil].include? item}
+    @race_types = AvantData.pluck(:race).uniq.reject {|item| [nil, " ", "   "].include? item}
+    
+    respond_to do |format|
+      format.html
+      format.json
+    end
+
   end
 end

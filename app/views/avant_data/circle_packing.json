@@ -1,0 +1,166 @@
+{
+  "name" : "AvantGarde",
+  "children" : [
+      {
+        "name" : "non-Hisp",
+        "children" : [
+            {
+              "name" : "White", "size" : "221"
+            },
+            {
+              "name" : "Unknown", "size" : "2"
+            },
+            {
+              "name" : "AfricanAmerican", "size" : "36"
+            },
+            {
+              "name" : "Asian", "size" : "10"
+            },
+            {
+              "name" : "NativeAmerican", "size" : "10"
+            },
+            {
+              "name" : "PacificIslander", "size" : "6"
+            },
+            {
+              "name" : "White/NativeAmerican", "size" : "5"
+            },
+            {
+              "name" : "NativeAmerican/White", "size" : "1"
+            },
+            {
+              "name" : "Asian/PacificIslander", "size" : "1"
+            },
+            {
+              "name" : "White/AfricanAmerican/NativeAmerican", "size" : "0"
+            },
+            {
+              "name" : "NativeAmerican/AfricanAmerican", "size" : "1"
+            },
+            {
+              "name" : "White/Asian/PacificIslander/AfricanAmerican", "size" : "1"
+            },
+            {
+              "name" : "White/PacificIslander", "size" : "0"
+            },
+            {
+              "name" : "White/NativeAmerican/AfricanAmerican", "size" : "1"
+            },
+            {
+              "name" : "PacificIslander/AfricanAmerican", "size" : "1"
+            },
+            {
+              "name" : "Other", "size" : "0"
+            }
+        ]
+      },
+      {
+        "name" : "Hisp",
+        "children" : [
+            {
+              "name" : "White", "size" : "89"
+            },
+            {
+              "name" : "Unknown", "size" : "22"
+            },
+            {
+              "name" : "AfricanAmerican", "size" : "7"
+            },
+            {
+              "name" : "Asian", "size" : "1"
+            },
+            {
+              "name" : "NativeAmerican", "size" : "38"
+            },
+            {
+              "name" : "PacificIslander", "size" : "2"
+            },
+            {
+              "name" : "White/NativeAmerican", "size" : "4"
+            },
+            {
+              "name" : "NativeAmerican/White", "size" : "3"
+            },
+            {
+              "name" : "Asian/PacificIslander", "size" : "0"
+            },
+            {
+              "name" : "White/AfricanAmerican/NativeAmerican", "size" : "1"
+            },
+            {
+              "name" : "NativeAmerican/AfricanAmerican", "size" : "1"
+            },
+            {
+              "name" : "White/Asian/PacificIslander/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "White/PacificIslander", "size" : "1"
+            },
+            {
+              "name" : "White/NativeAmerican/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "PacificIslander/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "Other", "size" : "3"
+            }
+        ]
+      },
+      {
+        "name" : "Unk",
+        "children" : [
+            {
+              "name" : "White", "size" : "137"
+            },
+            {
+              "name" : "Unknown", "size" : "0"
+            },
+            {
+              "name" : "AfricanAmerican", "size" : "13"
+            },
+            {
+              "name" : "Asian", "size" : "5"
+            },
+            {
+              "name" : "NativeAmerican", "size" : "0"
+            },
+            {
+              "name" : "PacificIslander", "size" : "1"
+            },
+            {
+              "name" : "White/NativeAmerican", "size" : "0"
+            },
+            {
+              "name" : "NativeAmerican/White", "size" : "0"
+            },
+            {
+              "name" : "Asian/PacificIslander", "size" : "0"
+            },
+            {
+              "name" : "White/AfricanAmerican/NativeAmerican", "size" : "0"
+            },
+            {
+              "name" : "NativeAmerican/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "White/Asian/PacificIslander/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "White/PacificIslander", "size" : "0"
+            },
+            {
+              "name" : "White/NativeAmerican/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "PacificIslander/AfricanAmerican", "size" : "0"
+            },
+            {
+              "name" : "Other", "size" : "0"
+            }
+        ]
+      }
+
+  ]
+}
+  
