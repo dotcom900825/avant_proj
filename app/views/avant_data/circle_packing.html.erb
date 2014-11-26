@@ -1,7 +1,21 @@
+<div class="container">
+  <div class='row'>
+    <div class='canvas col-xs-6'>
+    </div>    
+    <div class='col-xs-6'>
+      <select class="form-control" id="first_selection">
+        <option>ethnicity</option>
+        <option>race</option>
+      </select>
+    </div>
+  </div>
+  
+</div>
+
 <%= content_for :footer_scripts do%>
   <script>
     var margin = 20,
-        diameter = 960;
+        diameter = 600;
 
     var color = d3.scale.linear()
         .domain([-1, 5])
@@ -13,13 +27,13 @@
         .size([diameter - margin, diameter - margin])
         .value(function(d) { return d.size; })
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("body .canvas").append("svg")
         .attr("width", diameter)
         .attr("height", diameter)
       .append("g")
         .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-    d3.json("/avant_data/circle_packing.json", function(error, root) {
+    d3.json("/avant_data/circle_packing.json?query1=ethnicity&query2=race", function(error, root) {
       if (error) return console.error(error);
 
       var focus = root,
@@ -44,7 +58,6 @@
       var node = svg.selectAll("circle,text");
 
       d3.select("body")
-          .style("background", color(-1))
           .on("click", function() { zoom(root); });
 
       zoomTo([root.x, root.y, root.r * 2 + margin]);

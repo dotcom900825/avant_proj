@@ -1,0 +1,26 @@
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <% @column_names.each do |name| %>
+          <th>
+            <%= name%>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each do |obj|%>
+      <tr>
+        <% @column_names.each do |name|%>
+          <td>
+            <%= obj.send name.to_sym%>
+          </td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @data %>
+</div>

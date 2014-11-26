@@ -1,0 +1,39 @@
+<div class="container">
+  <div id="map_canvas" style="width:800px; height:600px">
+  </div>
+</div>
+
+<%= content_for :footer_scripts do %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSq3KTD-isfn9WfEPzY3Sa06Qu7VGO_Rc"
+  type="text/javascript"></script>
+
+  <script type="text/javascript">
+    var map;
+    var mapOptions = {
+      center: new google.maps.LatLng(58, 16),
+      zoom: 7,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        mapOptions);
+
+    $.getJSON("/avant_data/address.json", function(json1) {
+      $.each(json1, function(key, data) {
+              geocoder = new google.maps.Geocoder();
+      geocoder.geocode({"address": data.address}, function(results, status){
+        if(status == google.maps.GeocoderStatus.OK){
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+        }else{
+        }
+      });
+
+      });
+    });
+  </script>
+
+<% end %>

@@ -1,4 +1,9 @@
 class AvantDataController < ApplicationController
+  def index
+    @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
+    @data = AvantData.all.page(params[:page]).per(20)
+  end
+
   def gender
     @data = AvantData.all
 
@@ -19,13 +24,23 @@ class AvantDataController < ApplicationController
   end
 
   def circle_packing
-    @ethnicities = AvantData.pluck(:ethnicity).uniq.reject {|item| [nil].include? item}
-    @race_types = AvantData.pluck(:race).uniq.reject {|item| [nil, " ", "   "].include? item}
-    
+    @query1 = params[:query1]
+    @query2 = params[:query2]
+
     respond_to do |format|
       format.html
       format.json
     end
+  end
+
+  def address
+    @data = AvantData.pluck(:address).compact
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
+
 
   end
 end
