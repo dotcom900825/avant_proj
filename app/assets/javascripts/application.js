@@ -19,4 +19,3 @@
 //= require backbone_datalink
 //= require backbone/avantgarde
 //= require d3
-//= require_tree .

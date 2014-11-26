@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :password_resets
 
-  delete 'logout' => 'sessions#destroy', as: 'logout'
+  delete 'logout' => 'user_sessions#destroy', as: 'logout'
   resources :user_sessions
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     get "circle_packing", on: :collection
     get "gender", on: :collection
     get "address", on: :collection
+    get "bar_hierarchy", on: :collection
+    get "zip", on: :collection
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

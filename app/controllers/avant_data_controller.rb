@@ -40,7 +40,14 @@ class AvantDataController < ApplicationController
       format.html
       format.json
     end
-
-
   end
+
+  def bar_hierarchy
+    
+  end
+
+  def zip
+    
+  end
+
 end
