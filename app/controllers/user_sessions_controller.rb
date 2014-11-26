@@ -1,6 +1,6 @@
 class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
-  before_filter :skip_login
+  before_filter :skip_login, except: [:destroy]
 
   layout "user_manage"
 
@@ -25,6 +25,6 @@ class UserSessionsController < ApplicationController
   private
 
   def skip_login
-    redirect_to avant_data_path if current_user
+    redirect_to avant_data_path if current_user.present?
   end
 end
