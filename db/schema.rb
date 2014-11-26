@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141119015730) do
+ActiveRecord::Schema.define(version: 20141126044329) do
 
   create_table "avant_data", force: true do |t|
     t.string   "subject_identification"
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 20141119015730) do
     t.string   "reset_password_token"
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
+    t.string   "username"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
