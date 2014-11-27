@@ -190,7 +190,7 @@
    var winWidth = defWidth;
    var winHeight = defHeight ;
 
-   var tskey = "6d6d3ab795" ;
+   var tskey = "03861fcfff" ;
 
    function initialize() {
 
@@ -228,6 +228,9 @@
 
     infowindow = new google.maps.InfoWindow();
 
+    var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(32.5288276672363,-124.48201751709),new google.maps.LatLng(42.009521484375,-114.131202697754))
+
+    map.fitBounds(bounds) ;
 
     overlay = new ProjectedOverlay(map,'http://ts1.usnaviguide.com/imageserver.pl?Z=S&K=1&N=CA' + '&T=' + tskey, bounds, {}) ;
    }
