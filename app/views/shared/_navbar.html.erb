@@ -14,24 +14,33 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
-        <li>
-          <%= link_to "Address visualize", address_avant_data_path %>
-        </li>
-        <li>
-          <%= link_to "Race, ethnicity circle packing graph", circle_packing_avant_data_path %>
-        </li>
-        <li>
-          <%= link_to "Gender sunburst", gender_avant_data_path%>
-        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Visualization options <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <%= link_to "Address visualize", address_avant_data_path %>
+            </li>
+            <li>
+              <%= link_to "Race, ethnicity circle packing graph", circle_packing_avant_data_path %>
+            </li>
+            <li>
+              <%= link_to "Gender sunburst", gender_avant_data_path%>
+            </li>
 
-        <li>
-          <%= link_to "Race, ethnicity Bar hierarchy graph", bar_hierarchy_avant_data_path%>
-        </li>
+            <li>
+              <%= link_to "Race, ethnicity Bar hierarchy graph", bar_hierarchy_avant_data_path%>
+            </li>
 
-        <li>
-          <%= link_to "Zip code graph", zip_avant_data_path%>
-        </li>
+            <li>
+              <%= link_to "Zip code graph", zip_avant_data_path%>
+            </li>
 
+            <li>
+              <%= link_to "parallel visualize", parallel_avant_data_path%>
+            </li>
+
+          </ul>
+        </li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

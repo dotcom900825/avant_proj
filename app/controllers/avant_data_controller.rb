@@ -50,4 +50,14 @@ class AvantDataController < ApplicationController
     
   end
 
+  def parallel
+    @data = AvantData.select("gender", "SDTJ_01", "SDTJ_01_DEG", "SDTJ_015", "SDTJ_015_DEG", "LANL_01", "LANL_01_DEG", "LANL_015", "LANL_015_DEG")
+
+    respond_to do |format|
+      format.html
+      format.csv
+    end
+
+  end
+
 end

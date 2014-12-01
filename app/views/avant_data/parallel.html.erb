@@ -1,9 +1,9 @@
 <%= content_for :footer_scripts do %>
   <script type="text/javascript">
-    var species = ["setosa", "versicolor", "virginica"],
-    traits = ["sepal length", "petal length", "sepal width", "petal width"];
+    var species = ["male", "female", "tg", "unknown"],
+    traits = ["SDTJ_01", "SDTJ_01_DEG", "SDTJ_015", "SDTJ_015_DEG", "LANL_01", "LANL_01_DEG", "LANL_015", "LANL_015_DEG"];
 
-    var m = [80, 160, 200, 160],
+    var m = [80, 140, 200, 140],
         w = 1280 - m[1] - m[3],
         h = 800 - m[0] - m[2];
 
@@ -20,7 +20,9 @@
       .append("svg:g")
         .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-    d3.csv("iris.csv", function(flowers) {
+    d3.csv("/avant_data/parallel.csv", function(flowers) {
+
+      console.log(flowers);
 
       // Create a scale and brush for each trait.
       traits.forEach(function(d) {
@@ -50,7 +52,7 @@
       legend.append("svg:text")
           .attr("x", 12)
           .attr("dy", ".31em")
-          .text(function(d) { return "Iris " + d; });
+          .text(function(d) { return d; });
 
       // Add foreground lines.
       foreground = svg.append("svg:g")
@@ -59,7 +61,7 @@
           .data(flowers)
         .enter().append("svg:path")
           .attr("d", path)
-          .attr("class", function(d) { return d.species; });
+          .attr("class", function(d) { return d.gender; });
 
       // Add a group element for each trait.
       var g = svg.selectAll(".trait")
@@ -111,7 +113,10 @@
 
     // Returns the path for a given data point.
     function path(d) {
-      return line(traits.map(function(p) { return [x(p), y[p](d[p])]; }));
+      return line(traits.map(function(p) { 
+        // console.log([x(p), y[p](d[p])]);
+        return [x(p), y[p](d[p])]; 
+      }));
     }
 
     // Handles a brush event, toggling the display of foreground lines.

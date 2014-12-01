@@ -50,3 +50,60 @@ rect.background {
   stroke: #000;
   stroke-width: .5px;
 }
+
+svg {
+  font-size: 14px;
+}
+
+.foreground path {
+  fill: none;
+  stroke-opacity: .5;
+  stroke-width: 1.5px;
+}
+
+.foreground path.fade {
+  stroke: #000;
+  stroke-opacity: .05;
+}
+
+.legend {
+  font-size: 18px;
+  font-style: oblique;
+}
+
+.legend line {
+  stroke-width: 2px;
+}
+
+.male {
+  stroke: #800;
+}
+
+.female {
+  stroke: #080;
+}
+
+.tg {
+  stroke: #008;
+}
+
+.unknown{
+  stroke: #300;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
+}
