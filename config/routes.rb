@@ -16,7 +16,10 @@ Rails.application.routes.draw do
     get "address", on: :collection
     get "bar_hierarchy", on: :collection
     get "zip", on: :collection
+    get "three_digit_zip", on: :collection
     get "parallel", on: :collection
+    get "cluster", on: :collection
+    post "map_polylines", on: :collection
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,0 +1,281 @@
+
+<div id="main" class='container'>
+  <div id="form" class="TEXT2" style="height:25px">
+    <form name=zip3 onsubmit="javascript:return false;">
+    Key 3 Digit Zip <input type=text name=zip maxlength=3> <input type=BUTTON value="Map 3 Digit Zip" onclick="findzip(zip3)" name="BUTTON">
+    or click on the map.
+    <input type=BUTTON value="Clear" onclick="clearmap(zip3)" name="CLEARBUTTON">
+    </form>
+   </div>
+   <table width="100%" height="100%" border=0 cellPadding=2 cellSpacing=2>
+    <tr>
+     <td>
+      <script language="javascript">
+      <!--
+      if( window.innerHeight )
+      {
+       var width = window.innerWidth - 290 ;
+       var height = window.innerHeight - 140 ; 
+      } else
+      {
+       var width = document.documentElement.offsetWidth - 340 ;
+       var height = document.documentElement.offsetHeight - 160 ; 
+      }
+      document.write('<div id="map" style="width: ' + width  + 'px; height:' + height + 'px; border: thin solid black;">') ;
+      // -->
+      </script>
+      </div>
+     </td>
+     <td width=250 valign=top align=left>
+      <script language="javascript">
+      <!--
+      document.write('<div id="message" style="width: 250px; height:' + (height - 340) + 'px; overflow: auto; font-family:Verdana,sans-serif;">') ;
+      // -->
+      </script>
+      </div>
+      <div style="width:250px; height:94px;">
+      </div>
+      <div style="width:250px; height:250px;">
+      </div>
+
+     </td>
+    </tr>
+   </table>
+</div>
+
+<%= content_for :footer_scripts do%>
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAByb5oO5JbZLYH7IiTtAHXxThv1CnvEXCug_CS08whb5iKWIZ7RR4Shmfls-bd2mxdN6m4017SX8Z1Q" type="text/javascript"></script>
+
+  <script type="text/javascript">
+  //<![CDATA[
+   var zipar = [ ] ;          // Zips Found
+   var chkar = [ ] ;          // ZIP3 Found
+   var zp3ar = [ ] ;          // ZIP3 Found
+   var marar = [ ] ;          // Marker Array
+   var lastclick = "" ;         // Last Clicked Point
+   var map ;
+
+   function LoadMap()
+   {
+    if (GBrowserIsCompatible())       // Do Map if Compatible Browser only
+    {
+     map = new GMap2(document.getElementById("map"));
+     map.addControl(new GLargeMapControl());
+     map.addControl(new GMapTypeControl());
+     map.addControl(new GScaleControl()) ;
+     map.addControl(new GOverviewMapControl()) ;
+     var latlng = new GLatLng(35.036040,-89.977512) ; // Memphis Airport
+     map.setCenter(latlng,4);
+     GEvent.addListener(map, 'click', function(overlay, point)
+     {
+      if (overlay)
+      {
+      } else if (point) 
+      {
+       checkclick( point ) ;
+      }
+     });
+     if ( location.search.length > 1 )
+     {
+      zippoly( 0, location.search.substring(3,location.search.length) ) ;
+     }   
+    } else
+    {
+     document.getElementById("map").innerHTML = "<h1>Browser not compatible with Google Maps. Sorry...</h1>" ;
+    }
+   }
+
+// Find a zip code and cause it to be drawn on the map...
+
+   function findzip( zip3 )
+   {
+    if ( CheckZip( zip3.zip.value ) > -1 )
+    {
+     alert("3 Digit Zip Code Keyed Has Already Been Selected.") ;
+    } else
+    {
+     zippoly( 0, zip3.zip.value ) ;
+    }
+   }
+
+// Clear overlays, Div area and restore map...
+
+   function clearmap( zip3 )
+   {
+    zip3.zip.value = "" ;
+    document.getElementById("message").innerHTML = "" ;
+    map.clearOverlays() ;
+    lastclick = "" ;
+    zipar = [ ] ;
+    chkar = [ ] ;
+    zp3ar = [ ] ;
+    marar = [ ] ;
+   }
+
+// Check for a double click...
+
+   function checkclick ( point )
+   {
+    if ( lastclick != point )
+    {
+     lastclick = point ;
+     zippoly( point, '' ) ;
+    }
+   }
+
+// Open an Infowindow when the zip link is clicked in the message div...
+        
+   function zip3Link(zip3)
+   {
+    for (var i = 0; i < zp3ar.length; i++)
+    {
+     if ( zp3ar[i] == zip3 )
+     {
+      break ;
+     } 
+    }
+    GEvent.trigger(marar[i], "click");
+   }
+
+// Check to see if a ZIP3 has already been selected...
+        
+   function CheckZIP3(zip3)
+   {
+    for (var i = 0; i < chkar.length; i++)
+    {
+     if ( chkar[i] == zip3 )
+     {
+      return(i) ;
+     } 
+    }
+    return(-1) ;
+   }
+
+// Check to see if a Zip has already been selected...
+        
+   function CheckZip(zip)
+   {
+    for (var i = 0; i < zipar.length; i++)
+    {
+     if ( zipar[i] == zip )
+     {
+      return(i) ;
+     } 
+    }
+    return(-1) ;
+   }
+
+// Find a zip code and return the polygon coordinates along with other information...
+
+   function zippoly( point, zip )
+   {
+    var request = GXmlHttp.create();
+    var parms = "POINT=" + point ;
+    if ( zip )
+    {
+     parms = "ZIP3=" + zip ;
+     zipar.push( zip ) ;
+    }
+    request.open("POST", "/avant_data/map_polylines", true);
+    request.setRequestHeader('Content-Type','application/x-www-form-urlencoded') ;  // Thanks to Darkstar 3D!
+    request.onreadystatechange = function() 
+    {
+
+     if (request.readyState == 4)
+     {
+      var xmlDoc = request.responseXML ;
+      try
+      {
+       var info = xmlDoc.documentElement.getElementsByTagName("info") ;
+       var zip3 = info[0].getAttribute("zip3") ;
+       var hitrem = parseInt(info[0].getAttribute("hitrem")) ;
+       if ( hitrem <= 1 )
+       {
+        alert("You have exausted your requests for this time period. Please come back in 2 hours. If this is not enough for your purposes, please use the contact form, or see the sales information page for details on increasing your access.") ;
+       } else if ( zip3 == 0 )
+       {
+        alert("Area clicked not defined by a 3 Digit Zip Code") ;
+       } else
+       {
+        var zip3index = CheckZIP3( zip3 ) ;
+        if ( zip3index > -1 )
+        {
+         GEvent.trigger(marar[zip3index], "click")
+        } else
+        {
+         var lastpoint  = map.getCenter() ;
+         var point  = lastpoint ;
+         var areas  = parseInt(info[0].getAttribute("areas")) ;
+         var count  = parseInt(info[0].getAttribute("count")) ;
+         chkar.push(zip3) ;
+
+         for (var j = 1; j <= count; j++)
+         {
+          var polylines = xmlDoc.documentElement.getElementsByTagName("polyline" + j) ;
+          var points = [] ;
+          for (var i = 0; i < polylines.length; i++)
+          {
+           points.push( new GLatLng(parseFloat(polylines[i].getAttribute("lat")),parseFloat(polylines[i].getAttribute("lng"))) ) ;
+          }
+          map.addOverlay( new GPolyline(points,"#ff0000", 3, 1) ) ;
+          var markers = xmlDoc.documentElement.getElementsByTagName("marker" + j);
+          for (var i = 0; i < markers.length; i++)
+          {
+           point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),parseFloat(markers[i].getAttribute("lng"))) ;
+           html = "<div style='width:200px; text-align:left;'><b>ZIP3 Code:</b> " + zip3 ;
+           if ( areas > 1 )
+           {
+            html += "<br>Number of Areas: " + j + "/" + areas ;
+           }
+           html += "</div>" ;
+           marar.push( createMarker( point, html ) ) ;
+           zp3ar.push(zip3 + "A" + j) ;
+           map.addOverlay(marar[marar.length-1]);
+           var html = "<a href=\"javascript:zip3Link('" + zip3 + "A" + j + "')\">" + zip3 ;
+           if ( areas > 1 )
+           {
+            html += " (" + j + ")" ;
+           }
+           html += "</a><br>" ; 
+           document.getElementById("message").innerHTML =  html + document.getElementById("message").innerHTML ;
+          }
+         }
+         if ( point != lastpoint )
+         {
+          if( chkar.length > 1 )
+          {
+           map.setCenter( point, map.getZoom() ) ;
+          } else
+          {
+           map.setCenter( point, 9 ) ;
+          }
+         }
+        }
+       }
+      } catch(e)
+      {
+       alert("Some error occured during program processing:" + e) ;
+      }       
+     }
+    }
+    request.send(parms);
+   }
+
+// Create a marker at a point with an infowindow...
+
+   function createMarker(point, html) 
+   {
+    var marker = new GMarker(point);
+    GEvent.addListener(marker, "click", function()
+    {
+     marker.openInfoWindowHtml(html);
+    });
+    return marker;
+   }
+  //]]>
+
+  $(document).ready(function(){
+    LoadMap();
+  })
+  </script>
+<% end %>

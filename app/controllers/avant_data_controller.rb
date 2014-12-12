@@ -1,7 +1,17 @@
+require "net/http"
+
 class AvantDataController < ApplicationController
+  protect_from_forgery except: :map_polylines
+  before_action :set_headers, :only=>[:index]
+
   def index
     @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
     @data = AvantData.all.page(params[:page]).per(20)
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @data}
+    end
   end
 
   def gender
@@ -50,6 +60,10 @@ class AvantDataController < ApplicationController
     
   end
 
+  def three_digit_zip
+    
+  end
+
   def parallel
     @data = AvantData.select("gender", "SDTJ_01", "SDTJ_01_DEG", "SDTJ_015", "SDTJ_015_DEG", "LANL_01", "LANL_01_DEG", "LANL_015", "LANL_015_DEG")
 
@@ -60,4 +74,28 @@ class AvantDataController < ApplicationController
 
   end
 
+  def cluster
+    @data = AvantData.all.country(params[:country])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @data}
+    end
+
+  end
+
+  def map_polylines
+    url = URI.parse("http://maps.huge.info/zip3.pl")
+    response = Net::HTTP.post_form(url, {"ZIP3"=>params["ZIP3"]})
+    puts response.body
+    render text: response.body
+  end
+
+  private
+  def set_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
 end
