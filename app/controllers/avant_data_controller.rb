@@ -6,10 +6,10 @@ class AvantDataController < ApplicationController
 
   def index
     @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
-    @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enroment_date(params[:selectYear]).page(params[:page]).per(20)
+    @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enroment_date(params[:selectYear])
 
     respond_to do |format|
-      format.html
+      format.html { @data.page(params[:page]).per(20) }
       format.json
     end
   end
