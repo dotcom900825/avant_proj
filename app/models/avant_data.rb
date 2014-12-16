@@ -5,7 +5,7 @@ class AvantData < ActiveRecord::Base
   scope :marital_status, -> (status) {where(:marital_status=>status) if status.present?}
   scope :sexual_orientation, -> (orientations) {where(:sexual_orientation=>orientations) if orientations.present?}
   scope :primary_study, -> (studies) {where(:primary_study=>studies) if studies.present?}
-  scope :enroment_date, -> (date) {where("enrollment_time >= ? and enrollment_time <= ?", "#{date}-01-01", "#{date}-12-31") if date.present?}
+  scope :enroment_date, -> (date) {where("enrollment_time >= ?", "#{date}-01-01") if date.present?}
   
   def gender
     gender_hash = {0=>"male", 1=>"female", 2=>"tg", nil=>"unknown"}
