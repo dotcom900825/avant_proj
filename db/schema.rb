@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141126044329) do
+ActiveRecord::Schema.define(version: 20141216060056) do
 
   create_table "avant_data", force: true do |t|
     t.string   "subject_identification"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20141126044329) do
     t.integer  "lanl_01"
     t.integer  "lanl_015"
     t.string   "name"
-    t.date     "interview_time"
+    t.date     "enrollment_time"
     t.integer  "baseline_age"
     t.integer  "question_duration"
     t.integer  "gender"

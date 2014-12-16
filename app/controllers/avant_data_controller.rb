@@ -2,11 +2,11 @@ require "net/http"
 
 class AvantDataController < ApplicationController
   protect_from_forgery except: :map_polylines
-  before_action :set_headers, :only=>[:index]
+  before_action :set_headers
 
   def index
     @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
-    @data = AvantData.all.page(params[:page]).per(20)
+    @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enroment_date(params[:selectYear]).page(params[:page]).per(20)
 
     respond_to do |format|
       format.html

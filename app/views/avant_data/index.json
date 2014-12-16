@@ -1,0 +1,5 @@
+{
+  <% @data.each_with_index do |entry, index|%>
+    "<%= entry.primary_study_id %>" : {"primary_study" : "<%= entry.primary_study %>", "enrollment_date" : "<%= entry.enrollment_date%>", "first_pos_hiv" : "<%= entry.first_pos_hiv%>", "date_curr" : "<%= entry.date_curr%>", "sequence_id" : "<%= entry.sequence_id%>", "baseline_age" : "<%= entry.baseline_age%>", "gender" : "<%= entry.gender%>", "marital_status" : "<%= entry.marital_status%>", "sexual_orientation" : "<%= entry.sexual_orientation%>", "education" : "<%= entry.education%>", "zip" : "<%= entry.zip%>" }<%= "," if index + 1 < @data.size%>
+  <% end %>
+}
