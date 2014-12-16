@@ -10,7 +10,7 @@ class AvantDataController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json {render json: @data}
+      format.json
     end
   end
 
