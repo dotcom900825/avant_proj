@@ -28,7 +28,20 @@
       "SharpExposure" : "<%= entry.sharp_exposure%>", 
       "TransactionSex" : "<%= entry.transaction_sex_loc%>", 
       "SexProstitutes" : "<%= entry.sex_prostitutes%>",
-      "NumPartners" : "<%= entry.partner_number%>" 
+      "NumPartners" : "<%= entry.partner_number%>",
+      "NeedleSharing" : "<%= entry.sharing_needle%>",
+      "heroin" : "<%= entry.heroin%>",
+      "Meth" : "<%= entry.meth%>",
+      "Alcohol" : "<%= entry.alcohol_consumption%>",
+      "RecentInstitution" : "<%= entry.recent_institution%>",
+      "AcuteHIV" : "<%= entry.acute_hiv%>",
+      "FirstPosHIV": "<%= entry.first_pos_hiv%>",
+      "DateCurr" : "<%= entry.date_curr%>",
+      "Education" : "<%= entry.education%>",
+      "Address" : "<%= entry.address%>",
+      "ZIP" : "<%= entry.zip%>",
+      "State" : "<%= entry.residence_country%>",
+      "Country" : "<%= entry.residence_country%>"
     }<%= "," if index + 1 < @data.size%>
   <% end %>
 ]
