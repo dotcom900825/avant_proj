@@ -29,7 +29,6 @@
                                         "TransactionSex" : "<%= entry.transaction_sex_loc%>", 
                                         "SexProstitutes" : "<%= entry.sex_prostitutes%>",
                                         "NumPartners" : "<%= entry.partner_number%>" 
-                                      }
-                                      <%= "," if index + 1 < @data.size%>
+                                      }<%= "," if index + 1 < @data.size%>
   <% end %>
 }
