@@ -2,7 +2,7 @@
   <% @data.each_with_index do |entry, index|%>
     {
       "SequenceID" : "<%= entry.sequence_id%>", 
-      "PrimaryStudyID" : "<%= entry.primary_study %>", 
+      "PrimaryStudyID" : "<%= entry.primary_study_id %>", 
       "AEIDRPID" : "<%= entry.aeidrp_id%>", 
       "PrimaryStudy" : "<%= entry.primary_study%>", 
       "otherID" : "<%= entry.other_id%>", 
