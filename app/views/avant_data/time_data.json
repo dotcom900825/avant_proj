@@ -1,34 +1,34 @@
-{
+[
   <% @data.each_with_index do |entry, index|%>
-    "<%= entry.primary_study_id %>" : {
-                                        "SequenceID" : "<%= entry.sequence_id%>", 
-                                        "PrimaryStudyID" : "<%= entry.primary_study %>", 
-                                        "AEIDRPID" : "<%= entry.aeidrp_id%>", 
-                                        "PrimaryStudy" : "<%= entry.primary_study%>", 
-                                        "otherID" : "<%= entry.other_id%>", 
-                                        "EnrollmentDate" : "<%= entry.enrollment_date%>", 
-                                        "seqpresent" : "<%= entry.seqpresent%>", 
-                                        "SDTJ_01_DEG" : "<%= entry.sdtj_01_deg%>",
-                                        "SDTJ_015_DEG": "<%= entry.sdtj_015_deg%>",
-                                        "LANL_01_DEG" : "<%= entry.lanl_01_deg%>",
-                                        "LANL_015_DEG" : "<%= entry.lanl_015_deg%>",
-                                        "SDTJ_01" : "<%= entry.sdtj_01%>",
-                                        "SDTJ_015" : "<%= entry.sdtj_015%>",
-                                        "LANL_01" : "<%= entry.lanl_01%>",
-                                        "LANL_015" : "<%= entry.lanl_015%>",                                        
-                                        "Age" : "<%= entry.baseline_age%>", 
-                                        "Sex" : "<%= entry.gender%>", 
-                                        "Race" : "<%= entry.race%>",
-                                        "Ethnicity" : "<%= entry.ethnicity%>",
-                                        "MaritalStatus" : "<%= entry.marital_status%>", 
-                                        "SexualOrient" : "<%= entry.sexual_orientation%>", 
-                                        "RFHIV" : "<%= entry.rfhiv%>",                                         
-                                        "IDU" : "<%= entry.idu%>", 
-                                        "BloodTrans" : "<%= entry.blood_trans%>", 
-                                        "SharpExposure" : "<%= entry.sharp_exposure%>", 
-                                        "TransactionSex" : "<%= entry.transaction_sex_loc%>", 
-                                        "SexProstitutes" : "<%= entry.sex_prostitutes%>",
-                                        "NumPartners" : "<%= entry.partner_number%>" 
-                                      }<%= "," if index + 1 < @data.size%>
+    {
+      "SequenceID" : "<%= entry.sequence_id%>", 
+      "PrimaryStudyID" : "<%= entry.primary_study %>", 
+      "AEIDRPID" : "<%= entry.aeidrp_id%>", 
+      "PrimaryStudy" : "<%= entry.primary_study%>", 
+      "otherID" : "<%= entry.other_id%>", 
+      "EnrollmentDate" : "<%= entry.enrollment_date%>", 
+      "seqpresent" : "<%= entry.seqpresent%>", 
+      "SDTJ_01_DEG" : "<%= entry.sdtj_01_deg%>",
+      "SDTJ_015_DEG": "<%= entry.sdtj_015_deg%>",
+      "LANL_01_DEG" : "<%= entry.lanl_01_deg%>",
+      "LANL_015_DEG" : "<%= entry.lanl_015_deg%>",
+      "SDTJ_01" : "<%= entry.sdtj_01%>",
+      "SDTJ_015" : "<%= entry.sdtj_015%>",
+      "LANL_01" : "<%= entry.lanl_01%>",
+      "LANL_015" : "<%= entry.lanl_015%>",                                        
+      "Age" : "<%= entry.baseline_age%>", 
+      "Sex" : "<%= entry.gender%>", 
+      "Race" : "<%= entry.race%>",
+      "Ethnicity" : "<%= entry.ethnicity%>",
+      "MaritalStatus" : "<%= entry.marital_status%>", 
+      "SexualOrient" : "<%= entry.sexual_orientation%>", 
+      "RFHIV" : "<%= entry.rfhiv%>",                                         
+      "IDU" : "<%= entry.idu%>", 
+      "BloodTrans" : "<%= entry.blood_trans%>", 
+      "SharpExposure" : "<%= entry.sharp_exposure%>", 
+      "TransactionSex" : "<%= entry.transaction_sex_loc%>", 
+      "SexProstitutes" : "<%= entry.sex_prostitutes%>",
+      "NumPartners" : "<%= entry.partner_number%>" 
+    }<%= "," if index + 1 < @data.size%>
   <% end %>
-}
+]
