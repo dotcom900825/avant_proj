@@ -27,7 +27,7 @@ class AvantDataController < ApplicationController
   end
 
   def time_data
-    @data = AvantData.all
+    @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enroment_date(params[:selectYear])
     respond_to do |format|
       format.json
     end
