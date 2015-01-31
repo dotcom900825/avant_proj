@@ -33,8 +33,27 @@ class AvantData < ActiveRecord::Base
     return "None"
   end
 
+  def residence_state
+    if self.zip.present?
+      loc =  Geokit::Geocoders::MultiGeocoder.geocode(self.zip) 
+      return loc.state_code
+    end
+
+    self.read_attribute(:residence_state)      
+  end
+
+  def residence_city
+    if self.zip.present?
+      loc =  Geokit::Geocoders::MultiGeocoder.geocode(self.zip) 
+      return loc.city
+    end
+
+    self.read_attribute(:residence_city)
+  end
+
   def as_json(options={})
     options[:methods] = :drug_usage
+
     super(options)
   end
 end

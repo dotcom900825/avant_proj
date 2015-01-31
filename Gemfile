@@ -46,6 +46,7 @@ gem 'annotate', '~> 2.6.5'
 
 gem 'kaminari'
 
+gem "geokit"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
