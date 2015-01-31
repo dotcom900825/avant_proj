@@ -41,7 +41,7 @@
       "Address" : "<%= entry.address%>",
       "ZIP" : "<%= entry.zip%>",
       "State" : "<%= entry.residence_state%>",
-      "Country" : "<%= entry.residence_country%>"
+      "Country" : "<%= entry.residence_country%>",
       "City" : "<%= entry.residence_city%>"
     }<%= "," if index + 1 < @data.size%>
   <% end %>
