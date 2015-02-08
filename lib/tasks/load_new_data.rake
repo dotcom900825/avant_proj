@@ -1,4 +1,4 @@
-require "CSV"
+require "csv"
 
 task :load_new_data => :environment do
   counter = 0
