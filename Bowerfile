@@ -1,0 +1,5 @@
+asset 'angular'
+asset "angular-resource"
+asset "angular-underscore"
+asset "angular-nvd3"
+asset "angular-google-maps"

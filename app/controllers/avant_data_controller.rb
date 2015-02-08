@@ -9,17 +9,14 @@ class AvantDataController < ApplicationController
     @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enroment_date(params[:selectYear])
 
     respond_to do |format|
-      format.html { @data.page(params[:page]).per(20) }
+      format.html
       format.json
     end
   end
 
-  def gender
-    @data = AvantData.all
-
-    @male = [@data.gender(0).age(20, 30), @data.gender(0).age(30, 40), @data.gender(0).age(40, 50), @data.gender(0).age(50, 60), @data.gender(0).age(60, 70) ].map {|ele| ele.count}
-    @female = [@data.gender(1).age(20, 30), @data.gender(1).age(30, 40), @data.gender(1).age(40, 50), @data.gender(1).age(50, 60), @data.gender(1).age(60, 70) ].map {|ele| ele.count}
-
+  def pie_chart
+    @count_data = TicinoData.select(params[:column]).group(params[:column]).count
+    puts @count_data.class
     respond_to do |format|
       format.html
       format.json
@@ -65,11 +62,11 @@ class AvantDataController < ApplicationController
   end
 
   def parallel
-    @data = AvantData.select("gender", "SDTJ_01", "SDTJ_01_DEG", "SDTJ_015", "SDTJ_015_DEG", "LANL_01", "LANL_01_DEG", "LANL_015", "LANL_015_DEG")
+    @data = TicinoData.select(params[:columns]) if params[:columns]
 
     respond_to do |format|
       format.html
-      format.csv
+      format.json {render json: @data}
     end
 
   end
@@ -84,11 +81,48 @@ class AvantDataController < ApplicationController
 
   end
 
+  def flexible_cluster
+    if params[:column]
+      @data = TicinoData.select(params[:column]).group(params[:column]).count.except(nil, " ", 0, "Data Unavailable")
+    end
+
+    respond_to do |format|
+      format.html
+      format.json 
+    end
+  end
+
+  def all_data
+    @data = TicinoData.all.limit(100)
+
+    @data = TicinoData.column_names if params[:query] == "columns"
+
+    respond_to do |format|
+      format.json { render json: @data}
+    end
+
+  end
+
   def map_polylines
     url = URI.parse("http://maps.huge.info/zip3.pl")
     response = Net::HTTP.post_form(url, {"ZIP3"=>params["ZIP3"]})
     puts response.body
     render text: response.body
+  end
+
+  def scatter_chart
+    @heroin_data = TicinoData.where(:heroin_usage=>"Yes").select(:age, :number_of_sexual_partners, :education_in_years)
+    @meth_data = TicinoData.where(:methamphetamine_usage=>"Yes").select(:age, :number_of_sexual_partners, :education_in_years)
+    @alcohol_data = TicinoData.where(:alcohol_consumption=>"Yes").select(:age, :number_of_sexual_partners, :education_in_years)
+  end
+
+  def demo_data
+    @data = SdtjDemo.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enrollment_date(params[:selectYear])
+    
+    respond_to do |format|
+      format.json
+    end
+
   end
 
   private

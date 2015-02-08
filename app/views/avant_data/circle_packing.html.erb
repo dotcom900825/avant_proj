@@ -1,13 +1,13 @@
 <div class="container">
   <div class='row'>
-    <div class='canvas col-xs-6'>
-    </div>    
     <div class='col-xs-6'>
       <select class="form-control" id="first_selection">
         <option>ethnicity</option>
         <option>race</option>
       </select>
     </div>
+    <div class='canvas col-xs-6'>
+    </div>    
   </div>
   
 </div>
@@ -30,7 +30,7 @@
     var svg = d3.select("body .canvas").append("svg")
         .attr("width", diameter)
         .attr("height", diameter)
-      .append("g")
+        .append("g")  
         .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
     d3.json("/avant_data/circle_packing.json?query1=ethnicity&query2=race", function(error, root) {

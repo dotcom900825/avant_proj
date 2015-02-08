@@ -1,4 +1,44 @@
-<%= content_for :footer_scripts do %>
+<div class='container' ng-controller="ParallelController">
+  <div class='row'>
+    <div class='col-md-12'>
+      <nvd3 options="options" data="data"></nvd3>
+    </div>
+    
+  </div>
+
+  <div class='row'>
+    <div class='col-sm-2'>
+      <ul style="padding-left: 5px" >
+        <li ng-repeat="column in selectedColumns">
+          {{ column }} [<a href ng-click="selectedColumns.splice($index, 1)">X</a>]
+        </li>
+      </ul>
+
+      <select ng-model="columnToBeAdded" ng-change="addToSelectedColumns(columnToBeAdded)" ng-options="column for column in difference(columns, selectedColumns)">
+      </select>
+
+    </div>
+    <div class='col-sm-10'>
+      <table class='table'>
+        <thead>
+          <tr>
+            <th ng-repeat="column in selectedColumns">{{ column }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='info' ng-repeat="data in brushedData">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+          <tr ng-repeat="data in avantData">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= content_for :add_later do %>
   <script type="text/javascript">
     var species = ["male", "female", "tg", "unknown"],
     traits = ["SDTJ_01", "SDTJ_01_DEG", "SDTJ_015", "SDTJ_015_DEG", "LANL_01", "LANL_01_DEG", "LANL_015", "LANL_015_DEG"];
