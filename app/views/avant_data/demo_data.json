@@ -1,6 +1,7 @@
 [
   <% @data.each_with_index do |entry, index|%>
     {
+      "PID" : "<%= entry.pid%>",
       "SequenceID" : "<%= entry.sequence_id%>", 
       "PrimaryStudyID" : "<%= entry.aeh %>", 
       "PrimaryStudy" : "<%= entry.primary_study%>", 
@@ -27,7 +28,8 @@
       "ZIP" : "<%= entry.zip%>",
       "State" : "<%= entry.state%>",
       "Country" : "<%= entry.country%>",
-      "City" : "<%= entry.loc_res_city%>"
+      "City" : "<%= entry.loc_res_city%>",
+      "Cluster": "<%= entry.cluster_id%>"
     }<%= "," if index + 1 < @data.size%>
   <% end %>
 ]
