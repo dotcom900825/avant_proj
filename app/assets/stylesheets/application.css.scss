@@ -1,5 +1,6 @@
 //= require avant_data
 //= require nvd3/nv.d3
+//= require angular-d3-circle-packing
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
@@ -46,4 +47,8 @@
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.angular-google-map-container{
+  height: 800px;
 }

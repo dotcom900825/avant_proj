@@ -1,11 +1,44 @@
-<div class="container">
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org/" ng-app="appMaps">
+
+<head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <%= stylesheet_link_tag    'application', media: 'all'%>
+    <script src="//maps.googleapis.com/maps/api/js?libraries=weather,geometry,visualization,places&sensor=false&language=en&v=3.17"></script>
+    <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.26/angular.js" data-semver="1.2.26"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+    <script src="http://rawgit.com/angular-ui/angular-google-maps/master/dist/angular-google-maps.js"></script>
+
+    <script type='text/javascript'>
+      angular.module('appMaps', ['uiGmapgoogle-maps'])
+      .controller('mainCtrl', function($scope) {
+          $scope.map = {center: {latitude: 51.219053, longitude: 4.404418 }, zoom: 14 };
+          $scope.options = {scrollwheel: false};
+      });
+    </script><!--script-->
+
+</head>
+
+<body>
+  <div class='container'>
+    <div class='row'>
+      <div id="map_canvas" class='col-md-6' ng-controller="mainCtrl">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" options="options"></ui-gmap-google-map>
+      </div>
+
+      <div class='col-md-6'></div>
+    </div>
+  </div>
+<!--example-->
+</body>
+
+</html>
+
+
+<%= content_for :add_later do %>
   <div id="map_canvas" style="width:800px; height:600px">
   </div>
-</div>
-
-<%= content_for :footer_scripts do %>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSq3KTD-isfn9WfEPzY3Sa06Qu7VGO_Rc"
-  type="text/javascript"></script>
 
   <script type="text/javascript">
     var map;
@@ -35,5 +68,4 @@
       });
     });
   </script>
-
 <% end %>

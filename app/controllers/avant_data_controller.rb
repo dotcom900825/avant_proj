@@ -1,6 +1,7 @@
 require "net/http"
 
 class AvantDataController < ApplicationController
+  layout "empty", only: [:address]
   protect_from_forgery except: :map_polylines
   before_action :set_headers
 
@@ -16,7 +17,6 @@ class AvantDataController < ApplicationController
 
   def pie_chart
     @count_data = TicinoData.select(params[:column]).group(params[:column]).count
-    puts @count_data.class
     respond_to do |format|
       format.html
       format.json
@@ -31,9 +31,10 @@ class AvantDataController < ApplicationController
   end
 
   def circle_packing
-    @query1 = params[:query1]
-    @query2 = params[:query2]
-
+    if params[:columns]
+      @query1 = params[:columns][0]
+      @query2 = params[:columns][1]
+    end
     respond_to do |format|
       format.html
       format.json
@@ -62,8 +63,9 @@ class AvantDataController < ApplicationController
   end
 
   def parallel
-    @data = TicinoData.select(params[:columns]) if params[:columns]
+    @data = SdtjDemo.select(params[:columns]) if params[:columns]
 
+    @data = @data.where(params[:hierOne].to_sym=>params[:value])
     respond_to do |format|
       format.html
       format.json {render json: @data}
@@ -93,9 +95,9 @@ class AvantDataController < ApplicationController
   end
 
   def all_data
-    @data = TicinoData.all.limit(100)
+    @data = SdtjDemo.all.limit(100)
 
-    @data = TicinoData.column_names if params[:query] == "columns"
+    @data = SdtjDemo.column_names if params[:query] == "columns"
 
     respond_to do |format|
       format.json { render json: @data}

@@ -1,8 +1,11 @@
 avantGarde = angular.module('avantGarde', [
   "ngResource",
   "angular-underscore",
-  "nvd3"
+  "nvd3",
+  "uiGmapgoogle-maps",
+  "renderteam.circlePacking"
 ]);
+
 
 avantGarde.filter('columnFilter', function(){
   return function(items, filterValue, dataColumn){

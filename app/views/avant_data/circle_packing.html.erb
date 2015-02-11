@@ -1,18 +1,78 @@
-<div class="container">
+<div class="container" ng-controller="PackingController">
   <div class='row'>
     <div class='col-xs-6'>
-      <select class="form-control" id="first_selection">
-        <option>ethnicity</option>
-        <option>race</option>
-      </select>
+      <circle-packing nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
+
+      <hr>
+      <div>
+        <h6>Hierarchy</h6>
+        <ul style='list-style: none; padding-left: 0px'>
+          <li>
+            <select ng-model="hierOne" ng-change="queryData()" ng-options="column for column in columns">
+            </select>
+          </li>
+
+          <li>
+            <select ng-model="hierTwo" ng-change="queryData()" ng-options="column for column in columns">
+            </select>
+          </li>
+        </ul>
+
+      </div>
+
+      <div style="margin-top: 20px;">
+        <h6>Current Hierarchy</h6>
+        <ul style='list-style: none; padding-left: 0px'>
+          <li>{{ hierOne}} : {{ name }}</li>
+          <li>{{ hierTwo }} : {{ children }}</li>
+        </ul>
+        <button class="btn btn-primary" ng-show="name" ng-click="parallelCoordinate()">Visualize in Parallel Coordinate</button>
+      </div>
     </div>
-    <div class='canvas col-xs-6'>
-    </div>    
+
+    <div class='col-xs-6'>
+      <nvd3 options="options" data="data"></nvd3>
+      <hr>
+      {{ brushedData }}
+    </div>
+  </div>
+
+  <hr>
+
+  <div class='row'>
+    <div class='col-sm-12'>
+      <ul style="padding-left: 5px" >
+        <li ng-repeat="column in selectedColumns">
+          {{ column }} [<a href ng-click="selectedColumns.splice($index, 1)">X</a>]
+        </li>
+      </ul>
+
+      <select ng-model="columnToBeAdded" ng-change="addToSelectedColumns(columnToBeAdded)" ng-options="column for column in difference(columns, selectedColumns)">
+      </select>
+
+    </div>
+    <div class='col-sm-12'>
+      <table class='table'>
+        <thead>
+          <tr>
+            <th ng-repeat="column in selectedColumns">{{ column }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='info' ng-repeat="data in brushedData">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+          <tr ng-repeat="data in avantData">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   
 </div>
 
-<%= content_for :footer_scripts do%>
+<%= content_for :add_later do%>
   <script>
     var margin = 20,
         diameter = 600;
@@ -33,7 +93,7 @@
         .append("g")  
         .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-    d3.json("/avant_data/circle_packing.json?query1=ethnicity&query2=race", function(error, root) {
+    d3.json("/avant_data/circle_packing.json?query1=cluster_id&query2=race", function(error, root) {
       if (error) return console.error(error);
 
       var focus = root,
