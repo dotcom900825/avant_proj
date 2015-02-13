@@ -3,13 +3,13 @@
 <head>
   <title>Avantgarde</title>
   <%= stylesheet_link_tag    'application', media: 'all'%>
-  <%= javascript_include_tag 'application' if @use_js%>
   <%= csrf_meta_tags %>
 </head>
 
 <body ng-app="avantGarde">
   <%= render "shared/navbar"%>
   <%= yield %>
+  <%= javascript_include_tag 'application' if @use_js%>
   <%= yield :footer_scripts %>
 </body>
 
