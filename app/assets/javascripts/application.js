@@ -24,8 +24,3 @@
 //= require 3rd/angular-d3-circle-packing
 //= require lodash/dist/lodash.js
 //= require angular-google-maps/dist/angular-google-maps
-//= require app
-//= require parallel_coordinate
-//= require pie_chart
-//= require scatter_chart
-//= require d3_map
