@@ -48,6 +48,8 @@ gem 'sass', '3.2.19'
 
 gem 'bower-rails'
 
+gem "area"
+
 gem "zip-codes"
 
 # Use ActiveModel has_secure_password
