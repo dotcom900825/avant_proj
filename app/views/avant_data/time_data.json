@@ -21,7 +21,7 @@
       "Race" : "<%= entry.race%>",
       "Ethnicity" : "<%= entry.ethnicity%>",
       "MaritalStatus" : "<%= entry.marital_status%>", 
-      "SexualOrient" : "<%= entry.sexual_orientation%>", 
+      "SexualOrient" : "<%= entry.sex_orientation%>", 
       "RFHIV" : "<%= entry.rfhiv%>",                                         
       "IDU" : "<%= entry.idu%>", 
       "BloodTrans" : "<%= entry.blood_trans%>", 
@@ -42,7 +42,9 @@
       "ZIP" : "<%= entry.zip%>",
       "State" : "<%= entry.residence_state%>",
       "Country" : "<%= entry.residence_country%>",
-      "City" : "<%= entry.residence_city%>"
+      "City" : "<%= entry.residence_city%>",
+      "Latitude" : "<%= entry.lat%>",
+      "Longitude" : "<%= entry.long%>"
     }<%= "," if index + 1 < @data.size%>
   <% end %>
 ]
