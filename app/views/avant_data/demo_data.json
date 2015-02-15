@@ -29,7 +29,9 @@
       "State" : "<%= entry.state%>",
       "Country" : "<%= entry.country%>",
       "City" : "<%= entry.loc_res_city%>",
-      "SDTJ_015": "<%= entry.cluster_id%>"
+      "SDTJ_015": "<%= entry.cluster_id%>",
+      "Latitude" : "<%= entry.lat%>",
+      "Longitude" : "<%= entry.long%>"
     }<%= "," if index + 1 < @data.size%>
   <% end %>
 ]
