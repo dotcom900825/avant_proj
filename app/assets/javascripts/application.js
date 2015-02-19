@@ -20,7 +20,6 @@
 //= require angular-resource/angular-resource
 //= require angular-underscore/angular-underscore
 //= require nvd3/nv.d3.js
-//= require angular-nvd3/dist/angular-nvd3
 //= require 3rd/angular-d3-circle-packing
 //= require lodash/dist/lodash.js
 //= require angular-google-maps/dist/angular-google-maps
