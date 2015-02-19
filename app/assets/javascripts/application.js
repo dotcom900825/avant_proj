@@ -20,5 +20,4 @@
 //= require angular-resource/angular-resource
 //= require angular-underscore/angular-underscore
 //= require nvd3/nv.d3.js
-//= require 3rd/angular-d3-circle-packing
 //= require lodash/dist/lodash.js
