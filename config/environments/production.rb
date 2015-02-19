@@ -35,7 +35,7 @@ Rails.application.configure do
   config.assets.js_compressor = NoCompression.new
   config.assets.css_compressor = NoCompression.new
 
-  config.assets.precompile += %w( d3_related.js )
+  config.assets.precompile += %w(d3_related.js nvd3.js)
 
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
