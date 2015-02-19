@@ -22,4 +22,3 @@
 //= require nvd3/nv.d3.js
 //= require 3rd/angular-d3-circle-packing
 //= require lodash/dist/lodash.js
-//= require angular-google-maps/dist/angular-google-maps
