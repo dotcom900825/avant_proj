@@ -6,6 +6,6 @@ class SdtjDemo < ActiveRecord::Base
   scope :marital_status, -> (status) {where(:marital_status=>status) if status.present?}
   scope :sexual_orientation, -> (orientations) {where(:sexual_orientation=>orientations) if orientations.present?}
   scope :primary_study, -> (studies) {where(:primary_study=>studies) if studies.present?}
-  scope :enrollment_date, -> (date) {where("enrollment_time >= ?", "#{date}-01-01") if date.present?}
+  scope :enrollment_date, -> (date) {where("date_of_enrollment >= ?", "#{date}-01-01") if date.present?}
 
 end
