@@ -4,6 +4,12 @@ task :load_new_data => :environment do
   counter = 0
 
   CSV.foreach(File.expand_path('../new_data.csv', __FILE__)).each do |row|
+    enrollment_date = ""
+    begin
+      enrollment_date = Date.strptime(row[14], "%m/%d/%y")
+    rescue Exception => e
+    end
+
     if counter == 0
       puts row
     else
@@ -18,7 +24,7 @@ task :load_new_data => :environment do
         :edi_date=>row[10],
         :zip=>row[12],
         :date_of_sequence=>row[13],
-        :date_of_enrollment=>row[14],
+        :date_of_enrollment=>enrollment_date,
         :race=>row[15],
         :ethnicity=>row[16],
         :marital_status=>row[17],
