@@ -4,6 +4,16 @@
       <circle-packing nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
 
       <hr>
+      <div style="margin-top: 20px;">
+        <h6>Current Hierarchy</h6>
+        <ul style='list-style: none; padding-left: 0px'>
+          <li>{{ hierOne}} : {{ name }}</li>
+          <li>{{ hierTwo }} : {{ children }}</li>
+          <li>{{ hierThree}} : </li>
+        </ul>
+        <button class="btn btn-primary" ng-show="name" ng-click="parallelCoordinate()">Visualize in Parallel Coordinate</button>
+      </div>
+      
       <div>
         <h6>Hierarchy</h6>
         <ul style='list-style: none; padding-left: 0px'>
@@ -16,17 +26,14 @@
             <select ng-model="hierTwo" ng-change="queryData()" ng-options="column for column in columns">
             </select>
           </li>
+
+          <li>
+            <select ng-model="hierThree" ng-change="queryData()" ng-options="column for column in columns">
+            </select>
+          </li>
+
         </ul>
 
-      </div>
-
-      <div style="margin-top: 20px;">
-        <h6>Current Hierarchy</h6>
-        <ul style='list-style: none; padding-left: 0px'>
-          <li>{{ hierOne}} : {{ name }}</li>
-          <li>{{ hierTwo }} : {{ children }}</li>
-        </ul>
-        <button class="btn btn-primary" ng-show="name" ng-click="parallelCoordinate()">Visualize in Parallel Coordinate</button>
       </div>
     </div>
 

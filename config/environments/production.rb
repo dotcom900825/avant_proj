@@ -35,9 +35,6 @@ Rails.application.configure do
   config.assets.js_compressor = NoCompression.new
   config.assets.css_compressor = NoCompression.new
 
-  config.assets.precompile += %w(d3_related.js nvd3.js angular-google-map.js circle-packing.js)
-
-
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Specifies the header that your server uses for sending files.

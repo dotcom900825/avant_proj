@@ -21,5 +21,7 @@ module Avantgarde
     # config.i18n.default_locale = :de
     config.autoload_paths += Dir["#{config.root}/lib/modules/"]
     config.assets.paths << Rails.root.join("vendor","assets","bower_components")
+
+    config.assets.precompile += %w(d3_related.js nvd3.js angular-google-map.js circle-packing.js)
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208003537) do
+ActiveRecord::Schema.define(version: 20150222203548) do
 
   create_table "avant_data", force: true do |t|
     t.string   "subject_identification"
@@ -96,6 +96,8 @@ ActiveRecord::Schema.define(version: 20150208003537) do
     t.integer  "recent_institution"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "lat"
+    t.string   "long"
   end
 
   create_table "sdtj_demos", force: true do |t|
@@ -110,7 +112,7 @@ ActiveRecord::Schema.define(version: 20150208003537) do
     t.string   "edi_date"
     t.string   "zip"
     t.string   "date_of_sequence"
-    t.string   "date_of_enrollment"
+    t.date     "date_of_enrollment",                         limit: 255
     t.string   "race"
     t.string   "ethnicity"
     t.string   "marital_status"
@@ -157,6 +159,8 @@ ActiveRecord::Schema.define(version: 20150208003537) do
     t.string   "clustering_binary"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "lat"
+    t.string   "long"
   end
 
   create_table "ticino_data", force: true do |t|

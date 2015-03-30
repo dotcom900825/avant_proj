@@ -4,7 +4,13 @@ avantGarde = angular.module('avantGarde', [
   "nvd3",
   "uiGmapgoogle-maps",
   "renderteam.circlePacking"
-]);
+]).config(function(uiGmapGoogleMapApiProvider) {
+  uiGmapGoogleMapApiProvider.configure({
+      //    key: 'your api key',
+      v: '3.17',
+      libraries: 'weather,geometry,visualization'
+  });
+})
 
 
 avantGarde.filter('columnFilter', function(){

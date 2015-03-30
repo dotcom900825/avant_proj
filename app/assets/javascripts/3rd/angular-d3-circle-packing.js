@@ -29,12 +29,13 @@ function circlePacking () {
               arr[i] = o.name;
             }
             scope.children = arr;
-            
+            // scope.mapTrigger = true;
           })     
         }else{
           scope.$apply(function(){
             scope.name = "";
             scope.children = "";
+            // scope.mapTrigger = false;
           })  
         }
 

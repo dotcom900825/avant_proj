@@ -1,7 +1,6 @@
 require "net/http"
 
 class AvantDataController < ApplicationController
-  layout "empty", only: [:address]
   protect_from_forgery except: :map_polylines
   before_action :set_headers
 
@@ -98,6 +97,8 @@ class AvantDataController < ApplicationController
     @data = SdtjDemo.all.limit(100)
 
     @data = SdtjDemo.column_names if params[:query] == "columns"
+
+    @data = SdtjDemo.all.where(params[:filterBy].to_sym=>params[:value]) if params[:filterBy].present? && params[:value].present?
 
     respond_to do |format|
       format.json { render json: @data}

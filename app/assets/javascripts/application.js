@@ -21,3 +21,6 @@
 //= require angular-underscore/angular-underscore
 //= require nvd3/nv.d3.js
 //= require lodash/dist/lodash.js
+//= require angular-google-maps/dist/angular-google-maps
+//= require leaflet/dist/leaflet
+//= require angular-leaflet-directive/dist/angular-leaflet-directive

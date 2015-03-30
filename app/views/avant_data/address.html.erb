@@ -1,39 +1,101 @@
-<!DOCTYPE html>
-<html xmlns:ng="http://angularjs.org/" ng-app="appMaps">
+<div class='container' ng-app="avantGarde" ng-controller="PackingController">
+  <div class='row'>
+    <div class='col-xs-2'>
+      <label>Visualization Path</label>
+    </div>
 
-<head>
-    <meta charset="utf-8" />
-    <title>AngularJS Plunker</title>
-    <%= stylesheet_link_tag    'application', media: 'all'%>
-    <script src="//maps.googleapis.com/maps/api/js?libraries=weather,geometry,visualization,places&sensor=false&language=en&v=3.17"></script>
-    <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.26/angular.js" data-semver="1.2.26"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-    <script src="http://rawgit.com/angular-ui/angular-google-maps/master/dist/angular-google-maps.js"></script>
-
-    <script type='text/javascript'>
-      angular.module('appMaps', ['uiGmapgoogle-maps'])
-      .controller('mainCtrl', function($scope) {
-          $scope.map = {center: {latitude: 51.219053, longitude: 4.404418 }, zoom: 14 };
-          $scope.options = {scrollwheel: false};
-      });
-    </script><!--script-->
-
-</head>
-
-<body>
-  <div class='container'>
-    <div class='row'>
-      <div id="map_canvas" class='col-md-6' ng-controller="mainCtrl">
-        <ui-gmap-google-map center="map.center" zoom="map.zoom" options="options"></ui-gmap-google-map>
+    <div class='col-xs-10'>
+      <div class='col-xs-2' ng-repeat="visual in visualPath">
+        <%= image_tag "{{visual}}.png", :width=>100%>
+        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
       </div>
 
-      <div class='col-md-6'></div>
+      <div class="dropdown yamm-fw col-xs-2" style="margin-top: 20px">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-default">
+          Select next visualization
+        </a>
+          <ul class="dropdown-menu" style="width: 400px; padding: 20px 40px;">
+            <li>
+              <div class="yamm-content">
+                <div class="row">
+                <div class='row'>
+                  <div class="col-xs-6">
+                    <a href="#" class="thumbnail"><img alt="150x190" src="https://camo.githubusercontent.com/84c8b74251ec9b1aaa85b90bc584f307b838a470/687474703a2f2f64336a732e6f72672f65782f697269732d706172616c6c656c2e706e67" width=100> Parallel Coordinate</a>
+                  </div>
+                  <div class="col-xs-6">
+                    <a href="#" class="thumbnail"><img alt="150x190" src="https://camo.githubusercontent.com/94fbe58ca94c837184b682ff0cfc2ad924fd36df/687474703a2f2f64336a732e6f72672f65782f697269732d73706c6f6d2e706e67" width=100>Scatterplot Matrix</a>
+                  </div>
+                </div>
+                  <div class="col-xs-6"><a href="#" class="thumbnail"><img alt="150x190" src="https://camo.githubusercontent.com/1415e2af369262e466534480edbc7baa883e5b58/687474703a2f2f64336a732e6f72672f65782f73756e62757273742e706e67" width=100>Sunburst plot</a></div>
+                  <div class="col-xs-6 col-sm-6"><a href="#" class="thumbnail"><img alt="150x190" src="https://camo.githubusercontent.com/e646acd936244a6db8a140fb0e1e421d95b97d8e/687474703a2f2f64336a732e6f72672f65782f747265652e706e67" width=100>Node link tree</a></div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
     </div>
-  </div>
-<!--example-->
-</body>
 
-</html>
+  </div>
+
+  <hr>
+  
+  <div class='row'>
+    <div class='col-xs-6'>
+      <div class='row'>
+        <div class='col-xs-2'>
+          <label>Hierarchy</label>
+        </div>
+        <div class='col-xs-10'>
+          <select ng-model="hierOne" ng-change="queryData()" ng-options="column for column in columns" style="width: 200px">
+          </select>
+          <select ng-model="hierTwo" ng-change="queryData()" ng-options="column for column in columns" style="width: 200px">
+          </select>
+        </div>
+        </ul>
+
+      </div>
+
+      <div class='row' style="margin-top: 20px;">
+        <div class='col-xs-2'>
+          <label>Current Hierarchy</label>
+        </div>
+
+        <div class='col-xs-10'>
+          <div class='col-xs-6'>
+            {{ hierOne}} : {{ name }}
+          </div>
+
+          <div class='col-xs-6'>
+            {{ hierTwo }} : {{ children }}
+          </div>
+        </div>
+
+        <button class="btn btn-primary" ng-show="name" ng-click="parallelCoordinate()">Visualize in Parallel Coordinate</button>
+      </div>
+
+      <hr>
+
+      <circle-packing nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
+      
+    </div>
+
+    <div id="map_canvas" class='col-md-6'>
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" options="options">
+        <ui-gmap-markers ng-if="map.showMarkers"
+        doCluster="map.doCluster"
+        models="searchResults.results"
+        coords="'coords'"
+        idkey="'key'"
+        chunk="200"
+        ></ui-gmap-markers>
+
+      </ui-gmap-google-map>
+
+    </div>
+
+  </div>
+</div>
+
 
 
 <%= content_for :add_later do %>
