@@ -5,6 +5,7 @@
 var app = angular.module( 'renderteam.circlePacking', []);
 app.directive( 'circlePacking', circlePacking );
 
+
 circlePacking.$inject = [];
 function circlePacking () {
   return {

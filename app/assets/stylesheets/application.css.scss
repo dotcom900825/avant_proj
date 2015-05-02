@@ -1,10 +1,8 @@
-//= require avant_data
-//= require nvd3/nv.d3
 //= require angular-d3-circle-packing
 //= require yamm2/yamm/yamm.css
 //= require leaflet/dist/leaflet.css
-@import "bootstrap-sprockets";
-@import "bootstrap";
+//= require flat-ui/dist/css/vendor/bootstrap.min
+//= require flat-ui/dist/css/flat-ui
 
 
  body {
@@ -53,4 +51,75 @@
 
 .angular-google-map-container{
   height: 800px;
+}
+
+.legend {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #555;
+  width: 100px;
+}
+
+.legend i {
+  clear: both;
+  width: 16px;
+  height: 16px;
+  float: left;
+  opacity: 0.7;
+  margin-right: 8px;
+}
+
+div.country {
+  font-size: 2em;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+  z-index: 100;
+  padding: .2em .5em;
+  line-height: 1.1em;
+  text-align: center;
+}
+
+.info {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+}
+
+/**********
+* Parallel Coordinates
+*/
+
+.nvd3 .background path {
+  fill: none;
+  stroke: #ccc;
+  stroke-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .foreground path {
+  fill: none;
+  stroke: steelblue;
+  stroke-opacity: .7;
+}
+
+.nvd3 .brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.nvd3 .axis text {
+  text-shadow: 0 1px 0 #fff;
 }

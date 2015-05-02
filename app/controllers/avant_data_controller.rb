@@ -4,6 +4,8 @@ class AvantDataController < ApplicationController
   protect_from_forgery except: :map_polylines
   before_action :set_headers
 
+  layout "empty", :only=>[:geojson_example]
+
   def index
     @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
     @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enrollment_date(params[:selectYear])
@@ -14,8 +16,54 @@ class AvantDataController < ApplicationController
     end
   end
 
+  def all_data
+
+    case params[:type]
+    when "columns"
+      @data = SdtjDemo.column_names
+      respond_to do |format|
+        format.json { render json: @data}
+      end 
+
+    when "circle_packing"
+      if params[:columns]
+        @query1 = params[:columns][0]
+        @query2 = params[:columns][1]
+      end
+      respond_to do |format|
+        format.json { render template: "avant_data/circle_packing"}
+      end
+
+    when "parallel"
+      @data = SdtjDemo.select(params[:columns]) if params[:columns]
+
+      @data = @data.where(params[:filters].first.to_sym=>params[:filter_values].first) if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
+      respond_to do |format|
+        format.html
+        format.json {render json: @data}
+      end
+
+    when "pie_chart"
+      @count_data = SdtjDemo.select(params[:column]).group(params[:column]).count
+      @count_data = SdtjDemo.select(params[:column]).where(params[:filters].first.to_sym=>params[:filter_values].first).group(params[:column]).count if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
+      respond_to do |format|
+        format.html
+        format.json {render template: "avant_data/pie_chart"}
+      end
+
+    else
+      @data = SdtjDemo.all
+      @data = SdtjDemo.all.where(params[:filterBy].to_sym=>params[:value]) if params[:filterBy].present? && params[:value].present?
+      respond_to do |format|
+        format.html
+        format.json {render json: @data}
+      end
+
+    end
+  end
+
   def pie_chart
-    @count_data = TicinoData.select(params[:column]).group(params[:column]).count
+    @count_data = SdtjDemo.select(params[:column]).group(params[:column]).count
     respond_to do |format|
       format.html
       format.json
@@ -93,18 +141,7 @@ class AvantDataController < ApplicationController
     end
   end
 
-  def all_data
-    @data = SdtjDemo.all.limit(100)
 
-    @data = SdtjDemo.column_names if params[:query] == "columns"
-
-    @data = SdtjDemo.all.where(params[:filterBy].to_sym=>params[:value]) if params[:filterBy].present? && params[:value].present?
-
-    respond_to do |format|
-      format.json { render json: @data}
-    end
-
-  end
 
   def map_polylines
     url = URI.parse("http://maps.huge.info/zip3.pl")
@@ -127,6 +164,23 @@ class AvantDataController < ApplicationController
     end
 
   end
+
+  def geojson
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def all
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def geojson_example
+    
+  end
+
 
   private
   def set_headers

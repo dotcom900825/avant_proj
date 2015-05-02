@@ -2,15 +2,9 @@ avantGarde = angular.module('avantGarde', [
   "ngResource",
   "angular-underscore",
   "nvd3",
-  "uiGmapgoogle-maps",
-  "renderteam.circlePacking"
-]).config(function(uiGmapGoogleMapApiProvider) {
-  uiGmapGoogleMapApiProvider.configure({
-      //    key: 'your api key',
-      v: '3.17',
-      libraries: 'weather,geometry,visualization'
-  });
-})
+  "renderteam.circlePacking",
+  "leaflet-directive"
+])
 
 
 avantGarde.filter('columnFilter', function(){

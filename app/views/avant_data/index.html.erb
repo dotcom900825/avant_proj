@@ -1,78 +1,74 @@
-<div class="container">
-  <table class="table">
-    <tbody>
-      <tr>
-        <td>
-          Dendrogram
-          <br>
-          <a href="http://bl.ocks.org/mbostock/4063570"><img src="https://camo.githubusercontent.com/e1a1948f0bcfa095d54793afd3ab96af97731773/687474703a2f2f64336a732e6f72672f65782f636c75737465722e706e67" width="202" data-canonical-src="http://d3js.org/ex/cluster.png"></a>
-        </td>
+<div class='container' ng-app="avantGarde" ng-controller="PackingController">
+  <%= render "nav_menu"%>
 
-        <td>
-          Circle Packing
-          <br>
-          <a href="http://bl.ocks.org/mbostock/4063530"><img src="https://camo.githubusercontent.com/428c04c95f2a18ce7178d9d6135f1eab8df10ebd/687474703a2f2f64336a732e6f72672f65782f7061636b2e706e67" width="202" data-canonical-src="http://d3js.org/ex/pack.png"></a>        
-        </td>
+  <hr>
+  
+  <div class='row'>
+    <div class='col-xs-6'>
+      <%= render "gadget_menu"%>
 
-        <td>
-          Sunburst
-          <br>
-          <a href="http://bl.ocks.org/mbostock/4063423"><img src="https://camo.githubusercontent.com/1415e2af369262e466534480edbc7baa883e5b58/687474703a2f2f64336a732e6f72672f65782f73756e62757273742e706e67" width="202" data-canonical-src="http://d3js.org/ex/sunburst.png"></a>
-        </td>
+      <hr>
 
-        <td>
-          Node-Link Tree
-          <br>
-          <a href="http://bl.ocks.org/mbostock/4063550"><img src="https://camo.githubusercontent.com/e646acd936244a6db8a140fb0e1e421d95b97d8e/687474703a2f2f64336a732e6f72672f65782f747265652e706e67" width="202" data-canonical-src="http://d3js.org/ex/tree.png"></a>
-        </td>
+      <circle-packing ng-show="checkCurrentPath('circle_packing')" nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
 
-        <td>Parallel Coordinates
-          <br>
-          <a href="http://mbostock.github.com/d3/talk/20111116/iris-parallel.html"><img src="https://camo.githubusercontent.com/84c8b74251ec9b1aaa85b90bc584f307b838a470/687474703a2f2f64336a732e6f72672f65782f697269732d706172616c6c656c2e706e67" width="202" data-canonical-src="http://d3js.org/ex/iris-parallel.png"></a>
-        </td>
-      </tr>
+      <nvd3 id="parallel_coordinate" ng-show="checkCurrentPath('parallel_coordinate')"  options="parallel_coordinate_options" data="data"></nvd3>
 
-      <tr>
+      <nvd3 id="pie" ng-show="checkCurrentPath('pie')" options="pie_options" data="data"></nvd3>
 
-        <td>Scatterplot Matrix
-          <br>
-          <a href="http://mbostock.github.com/d3/talk/20111116/iris-splom.html"><img src="https://camo.githubusercontent.com/94fbe58ca94c837184b682ff0cfc2ad924fd36df/687474703a2f2f64336a732e6f72672f65782f697269732d73706c6f6d2e706e67" width="202" data-canonical-src="http://d3js.org/ex/iris-splom.png"></a>
-        </td>
+      <nvd3 id="scatter_plot" ng-show="checkCurrentPath('scatter_plot')" options="scatter_plot_options" data="data"></nvd3>
+      
+    </div>
 
-        <td>Zoomable Sunburst
-          <br>
-          <a href="http://www.jasondavies.com/coffee-wheel/"><img src="https://camo.githubusercontent.com/3579d11cf675da2a12ffcdad356e524978b97434/687474703a2f2f64336a732e6f72672f65782f636f666665652e706e67" width="202" data-canonical-src="http://d3js.org/ex/coffee.png"></a>
-        </td>
+    <div id="map_canvas" class='col-md-6'>
 
-        <td>BiPartite Visualization
-          <br><a href="http://bl.ocks.org/NPashaP/9796212">
-          <img src="https://camo.githubusercontent.com/45a6db7f4cd5cb48bba78d114812afcf3c758584/687474703a2f2f626c2e6f636b732e6f72672f4e5061736861502f7261772f393739363231322f7468756d626e61696c2e706e67" width="202" data-canonical-src="http://bl.ocks.org/NPashaP/raw/9796212/thumbnail.png"></a>
-        </td>
+    <div class="info country f32">
+        <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
+        <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
+    </div>
 
-        <td>
-          Rat heatmap
-          <br>
-          <a href="http://meredithmmyers.com/ratmap/#/"><%= image_tag "heatmap.png", :width=>200%></a>
-        </td>
+      <leaflet center="center" events="events" legend="legend" geojson="geojson" width="500" height="400"></leaflet>
+    </div>
 
-        <td>
-          Airbnb location relevance
-          <br>
-          <a href="http://nerds.airbnb.com/location-relevance/"><img src="http://nerds.airbnb.com/wp-content/uploads/2013/05/3_neighborhood_bookings1.jpg" width=200></a>
-        </td>
-      </tr>
+  </div>
 
-      <tr>
-        <td>
-          <a href=""></a>Stock Leaders Bubble Chart
-          <br>
-          <a href="http://tomsisk.com/ondemand/"><img src="https://camo.githubusercontent.com/ad07d9faf3bfc5fb0adea6c8584b5d278239996b/687474703a2f2f746f6d7369736b2e636f6d2f6f6e64656d616e642f696d672f73637265656e2e706e67" data-canonical-src="http://tomsisk.com/ondemand/img/screen.png"></a>
-        </td>
+  <hr>
 
-        <td>Viroscope - virus taxonomy viewer<br><a href="http://viroscope.info/"><img src="https://camo.githubusercontent.com/e3e8a63e33f81c59af57f949b380fa5a70e2002e/687474703a2f2f6a6f6e2e65732f6f746865722f7669726f73636f70652e706e67" width="202" data-canonical-src="http://jon.es/other/viroscope.png"></a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <%#= render "data_section"%>
 
 </div>
+
+
+
+<%= content_for :add_later do %>
+  <div id="map_canvas" style="width:800px; height:600px">
+  </div>
+
+  <script type="text/javascript">
+    var map;
+    var mapOptions = {
+      center: new google.maps.LatLng(58, 16),
+      zoom: 7,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        mapOptions);
+
+    $.getJSON("/avant_data/address.json", function(json1) {
+      $.each(json1, function(key, data) {
+              geocoder = new google.maps.Geocoder();
+      geocoder.geocode({"address": data.address}, function(results, status){
+        if(status == google.maps.GeocoderStatus.OK){
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+        }else{
+        }
+      });
+
+      });
+    });
+  </script>
+<% end %>

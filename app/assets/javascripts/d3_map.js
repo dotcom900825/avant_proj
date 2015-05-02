@@ -56,4 +56,4 @@ avantGarde.controller('mainCtrl', function($scope, $resource, uiGmapGoogleMapApi
     });
 
   })
-  });
+});

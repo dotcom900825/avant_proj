@@ -8,7 +8,8 @@ Rails.application.routes.draw do
 
   root 'user_sessions#new'
 
-  
+  resources :visualization_paths
+
   resources :avant_data do
     get "time_data", on: :collection
     get "circle_packing", on: :collection
@@ -24,6 +25,10 @@ Rails.application.routes.draw do
     post "map_polylines", on: :collection
     get "scatter_chart", on: :collection
     get "demo_data", on: :collection
+
+    get "geojson", on: :collection
+    get "all", on: :collection
+    get "geojson_example", on: :collection
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
