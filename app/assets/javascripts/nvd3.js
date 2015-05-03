@@ -1,1 +1,1 @@
-//= require angular-nvd3/dist/angular-nvd3
+//= require nvd3/nv.d3.js

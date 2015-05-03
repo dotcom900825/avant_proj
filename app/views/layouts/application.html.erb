@@ -13,6 +13,7 @@
   <%= yield %>
   <%= javascript_include_tag 'application' if @use_js%>
   <%= javascript_include_tag 'nvd3' if @use_js%>
+  <%= javascript_include_tag 'angular_nvd3' if @use_js%>
   <%= javascript_include_tag 'angular-google-map' if @use_js%>
   <%= javascript_include_tag 'circle-packing' if @use_js%>
   <%= javascript_include_tag 'leaflet' if @use_js%>
