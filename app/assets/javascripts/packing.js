@@ -15,13 +15,21 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
 
   };
 
+  var environment = "production";
+  var prefix = "";
+
+  if (environment == "production") {
+    prefix = "/viz";
+  };
+  
+
   $scope.saveCurrentPath = function(){
     visualPath.save({paths: $scope.visualPath, filters: $scope.filters, pathName: $scope.pathName}, function(){
 
     })
   }
 
-  visualPath = $resource('/visualization_paths', {format: 'json'});
+  visualPath = $resource(prefix + '/visualization_paths', {format: 'json'});
 
 
 
@@ -69,7 +77,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
 
   //------------------
 
-  AvantData = $resource('/avant_data/all_data', {format: 'json'});
+  AvantData = $resource(prefix + '/avant_data/all_data', {format: 'json'});
 
   AvantData.query(function(results){
     $scope.avantData = results;
@@ -141,7 +149,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
     }
   });
 
-  GeoBoundary = $resource("/avant_data/geojson", {format: 'json'});
+  GeoBoundary = $resource(prefix + "/avant_data/geojson", {format: 'json'});
 
   function render_map(zip_result){
     $scope.zip_hash = {};
