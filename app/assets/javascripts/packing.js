@@ -235,6 +235,14 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
 
   //----------------------
 
+  $scope.addColumnsParallel = function(column){
+    if(column !== ""){
+      $scope.selectedColumns.push(column);      
+    }
+
+    $scope.parallelCoordinate();
+  }
+
   $scope.parallelCoordinate = function(){
 
     AvantData.query({type: "parallel", "columns[]" : $scope.selectedColumns, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(results){
@@ -242,7 +250,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
       $scope.parallel_coordinate_options = {
         chart: {
           type: 'parallelCoordinates',
-          height: 450,
+          height: 10000,
           width: 600,
           margin: {
             top: 30,

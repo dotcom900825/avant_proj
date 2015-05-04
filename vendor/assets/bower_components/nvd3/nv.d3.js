@@ -11678,6 +11678,31 @@ nv.models.parallelCoordinates = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
+      var dimension_counts = {}
+      var max_dimension_size = 0
+
+      dimensions.forEach(function(d) {
+
+          // Let's get the count for each value so that we can sort the domain based
+          // on the number of items for each value.
+          data.map(function(p) {
+            if (dimension_counts[d] === undefined) {
+              dimension_counts[d] = [];
+            } else {
+              dimension_counts[d].push(p[d]);
+            }
+
+          });
+      })
+
+      Object.keys(dimension_counts).forEach(function(key){
+        dimension_counts[key] = _.uniq(dimension_counts[key]);
+        if (dimension_counts[key].length > max_dimension_size) {max_dimension_size = dimension_counts[key].length};
+      })
+
+      height = max_dimension_size * 8;
+      
       var availableWidth = width - margin.left - margin.right,
           availableHeight = height - margin.top - margin.bottom,
           container = d3.select(this);
@@ -11689,20 +11714,81 @@ nv.models.parallelCoordinates = function() {
       //------------------------------------------------------------
       // Setup Scales
 
+
+
       x
         .rangePoints([0, availableWidth], 1)
         .domain(dimensions);
 
+      var defaultScale = {
+        "date": function(k){
+          var extent = d3.extent(data, function(d){
+            return d[k] ? d[k].getTime() : null;
+          });
+
+        if (extent[0] === extent[1]) {
+          return d3.scale.ordinal()
+            .domain([extent[0]])
+            .rangePoints([availableHeight+1, 1]);
+        }
+
+        return d3.time.scale()
+          .domain(extent)
+          .range([availableHeight+1, 1]);
+        },
+
+        "number": function(k) {
+          var extent = d3.extent(data, function(d) { return +d[k]; });
+
+          // special case if single value
+          if (extent[0] === extent[1]) {
+            return d3.scale.ordinal()
+              .domain([extent[0]])
+              .rangePoints([availableHeight+1, 1]);
+          }
+
+          return d3.scale.linear()
+            .domain(extent)
+            .range([availableHeight+1, 1]);
+        },
+
+        "string": function(k) {
+          var counts = {},
+              domain = [];
+
+          // Let's get the count for each value so that we can sort the domain based
+          // on the number of items for each value.
+          data.map(function(p) {
+            if (counts[p[k]] === undefined) {
+              counts[p[k]] = 1;
+            } else {
+              counts[p[k]] = counts[p[k]] + 1;
+            }
+          });
+
+          domain = Object.getOwnPropertyNames(counts).sort(function(a, b) {
+            return counts[a] - counts[b];
+          });
+
+          return d3.scale.ordinal()
+            .domain(domain)
+            .rangePoints([availableHeight+1, 1]);
+        }
+
+      };
+
       // Extract the list of dimensions and create a scale for each.
       dimensions.forEach(function(d) {
-          y[d] = d3.scale.linear()
-              .domain(d3.extent(data, function(p) { return +p[d]; }))
-              .range([availableHeight, 0]);
+        // y[d] = d3.scale.linear()
+        //     .domain(d3.extent(data, function(p) { return +p[d]; }))
+        //     .range([availableHeight, 0]);
 
-          y[d].brush = d3.svg.brush().y(y[d]).on('brush', brush);
+        y[d] = defaultScale[typeof(d)](d);
 
-          return d != 'name';
-        })
+        y[d].brush = d3.svg.brush().y(y[d]).on('brush', brush);
+
+        return d != 'name';
+      })
 
 
       //------------------------------------------------------------
