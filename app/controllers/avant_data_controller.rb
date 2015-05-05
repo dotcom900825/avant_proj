@@ -3,12 +3,13 @@ require "net/http"
 class AvantDataController < ApplicationController
   protect_from_forgery except: :map_polylines
   before_action :set_headers
+  before_action :validate_login, :only=>[:index]
 
   layout "empty", :only=>[:geojson_example]
 
   def index
-    @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
-    @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enrollment_date(params[:selectYear])
+    # @column_names = AvantData.column_names.reject {|name| ["subject_identification", "name", "interview_time", "question_duration"].include? name.to_s}
+    # @data = AvantData.all.marital_status(params[:selectMarital]).sexual_orientation(params[:selectSex]).primary_study(params[:selectSite]).enrollment_date(params[:selectYear])
 
     respond_to do |format|
       format.html
@@ -188,5 +189,10 @@ class AvantDataController < ApplicationController
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
+
+  def validate_login
+    flash[:notice] = "You don't have access to this page"
+    redirect_to root_path if !current_user.present?
   end
 end
