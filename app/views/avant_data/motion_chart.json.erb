@@ -1,0 +1,16 @@
+{
+  "rows" : [
+    <% @data.each_with_index do |data, i| %>
+      {
+        <% time = data.send @time_column %>
+        "c": [
+          { "v": "<%= (data.send @group_by) || nil%>"},
+          { "v": "<%= "Date(#{time.year}, #{time.month}, #{time.day})" %>" },
+          { "v": <%= (data.send @x_param) || 0 %> },
+          { "v": <%= (data.send @y_param) || 0 %>},
+          { "v": <%= (data.send @size_param) || 0 %>}
+        ]
+      }<%= ',' if i < @data.size - 1%>
+    <% end %>
+  ]
+}

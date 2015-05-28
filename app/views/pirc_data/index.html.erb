@@ -1,0 +1,67 @@
+<div class='container' ng-controller="PircController">
+  <button class='btn btn-primary' ng-click="togglePHI()">Toggle PHI</button>
+
+  <div class='row'>
+    <div class='col-xs-6'>
+      <%= render "avant_data/gadget_menu"%>
+
+      <hr>
+
+      <circle-packing ng-show="checkCurrentPath('circle_packing')" nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
+
+      <nvd3 id="parallel_coordinate" ng-show="checkCurrentPath('parallel_coordinate')"  options="parallel_coordinate_options" data="data"></nvd3>
+
+      <nvd3 id="pie" ng-show="checkCurrentPath('pie')" options="pie_options" data="data"></nvd3>
+
+      <nvd3 id="scatter_plot" ng-show="checkCurrentPath('scatter_plot')" options="scatter_plot_options" data="data"></nvd3>
+      
+    </div>
+
+    <div id="map_canvas" class='col-md-6'>
+
+    <div class="info country f32">
+        <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
+        <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
+    </div>
+
+      <leaflet center="center" events="events" legend="legend" geojson="geojson" width="500" height="400"></leaflet>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class='row'>
+    <div class='col-sm-12'>
+      <!-- <table class='table'>
+        <thead>
+          <tr>
+            <th ng-repeat="column in selectedColumns">{{ column }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='info' ng-repeat="data in brushedData">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+          <tr ng-repeat="data in avantData | filter: {'zip': selectedZip}">
+            <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+          </tr>
+        </tbody>
+      </table> -->
+      <table ng-table="tableParams" class="table ng-table-responsive" show-filter="true">
+        <thead>
+          <tr>
+            <th ng-repeat="column in selectedColumns" ng-click="filterTable(column.field)" >{{column.name}}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="obj in $data | filter: {'zip_code': selectedZip}">
+            <td ng-repeat="column in selectedColumns" sortable="column.field" >{{ obj[column.field]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

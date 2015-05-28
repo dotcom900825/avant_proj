@@ -40,7 +40,6 @@ class AvantDataController < ApplicationController
 
       @data = @data.where(params[:filters].first.to_sym=>params[:filter_values].first) if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
       respond_to do |format|
-        format.html
         format.json {render json: @data}
       end
 
@@ -48,8 +47,34 @@ class AvantDataController < ApplicationController
       @count_data = SdtjDemo.select(params[:column]).group(params[:column]).count
       @count_data = SdtjDemo.select(params[:column]).where(params[:filters].first.to_sym=>params[:filter_values].first).group(params[:column]).count if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
       respond_to do |format|
-        format.html
         format.json {render template: "avant_data/pie_chart"}
+      end
+
+    when "scatter_chart"
+      @group_by = params[:group_by]
+      @data = SdtjDemo.all
+      @data = @data.where(params[:filters].first.to_sym=>params[:filter_values].first) if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
+      @grouped_data = @data.pluck(params[:group_by]).uniq.reject {|c| c.blank? || c.empty?}
+
+      @x_param = params[:x]
+      @y_param = params[:y]
+      @size_param = params[:size]
+      respond_to do |format|
+        format.json {render template: "avant_data/scatter_chart"}
+      end
+
+    when "motion_chart"
+      @data = SdtjDemo.where.not(params[:group_by]=>nil)
+      @data = @data.where.not(params[:time_column]=>nil)
+      @data = @data.where(params[:filters].first.to_sym=>params[:filter_values].first) if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
+
+      @x_param = params[:x]
+      @y_param = params[:y]
+      @size_param = params[:size]
+      @time_column = params[:time_column]
+      @group_by = params[:group_by]
+      respond_to do |format|
+        format.json {render template: "avant_data/motion_chart"}
       end
 
     else
@@ -192,7 +217,9 @@ class AvantDataController < ApplicationController
   end
 
   def validate_login
-    flash[:notice] = "You don't have access to this page"
-    redirect_to root_path if !current_user.present?
+    if current_user.nil?
+      flash[:notice] = "You don't have access to this page"
+      redirect_to root_path and return
+    end
   end
 end

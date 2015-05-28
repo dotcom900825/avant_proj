@@ -1,4 +1,4 @@
-avantGarde.controller("PackingController", ['$scope', "$resource", function($scope, $resource){
+avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "NgTableParams", function($scope, $resource, $filter, NgTableParams){
   
   $scope.visualPath = ["circle_packing"];
 
@@ -16,11 +16,21 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
   };
 
   var environment = "production";
+  $scope.avantData = [];
+  $scope.fullAvantData = [];
+
   var prefix = "";
 
   if (environment == "production") {
     prefix = "/viz";
   };
+
+  $scope.scatterPlotX = "current_hiv_load";
+  $scope.scatterPlotY = "age";
+  $scope.scatterPlotSize = "number_of_partners";
+  $scope.motionChartTime = "date_of_enrollment";
+  $scope.motionChartGroup = "sex";
+
   
 
   $scope.saveCurrentPath = function(){
@@ -30,9 +40,6 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
   }
 
   visualPath = $resource(prefix + '/visualization_paths', {format: 'json'});
-
-
-
 
 
   function generateFilter(key){
@@ -56,8 +63,17 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
 
   $scope.showVisualizationComponent = function(type){
     $scope.currentPath = type
+
     if (type == "parallel_coordinate") {
       $scope.parallelCoordinate();
+    };
+
+    if (type == "pie") {
+      $scope.pieChart();
+    };
+
+    if (type == 'scatter_plot') {
+      $scope.scatterPlotChart();
     };
   }
 
@@ -73,35 +89,89 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
       $scope.visualPath.push("pie");
       $scope.pieChart();
     }
+
+    if (name == 'scatter_plot') {
+      $scope.currentPath = "scatter_plot";
+      $scope.visualPath.push("scatter_plot");
+      $scope.scatterPlotChart();      
+    };
+
+    if (name == "motion_chart") {
+      $scope.currentPath = "motion_chart";
+      $scope.visualPath.push("motion_chart");
+      $scope.motionChart();
+    };
   }
 
+  $scope.tableParams = new NgTableParams({
+    page: 1,            // show first page
+    count: 10           // count per page
+
+  }, {
+    total: function() { return $scope.avantData.length}, // length of data
+    getData: function($defer, params) {
+      var orderedData = params.sorting() ? $filter('orderBy')($scope.avantData, params.orderBy()) : $scope.avantData;
+      params.total(orderedData.length);
+      $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+    }
+  });
+
+  $scope.filterTable = function(field){
+    $scope.tableParams.sorting(field, $scope.tableParams.isSortBy(field, 'asc') ? 'desc' : 'asc');
+  }
   //------------------
 
   AvantData = $resource(prefix + '/avant_data/all_data', {format: 'json'});
 
   AvantData.query(function(results){
     $scope.avantData = results;
+    $scope.fullAvantData = results;
     var zip_result = _.filter(results, function(obj) {return obj.zip != null});
 
     render_map(zip_result);
   });
+
+  $scope.$watch("avantData", function () {
+    $scope.tableParams.reload();
+  });  
 
   AvantData.query({type: "columns"},function(results){
     $scope.hierOne = "cluster_id";
     $scope.hierTwo = "zip";
 
     $scope.columns = results;
-    $scope.selectedColumns = ["pid", "cluster_id", "race", "inject_drug", "birth_city", "zip"];
+    $scope.selectedColumns = ["cluster_id", "race", "inject_drug", "birth_city", "zip"];
+
+    $scope.selectedColumns = _.map($scope.selectedColumns, function(obj){ return { field : obj }});
+
     //$scope.selectedColumns = ["time", "source", "destination", "protocol", "length", "info"];
     AvantData.get({type: "circle_packing", "columns[]" : [$scope.hierOne, $scope.hierTwo]}, function(results){
       $scope.nodes = results;
+      
+      $scope.data = results;
+
+      $scope.circle_packing_options = {
+        chart: {
+          type: 'circlePacking',
+          height: 400,
+          width: 500,
+          margin: {
+            top: 30,
+            right: 40,
+            bottom: 50,
+            left: 10
+          },
+          dimensions: $scope.columns,
+        }  
+      };
+
     });
 
   });
 
   $scope.addToSelectedColumns = function(column){
     if(column !== ""){
-      $scope.selectedColumns.push(column);      
+      $scope.selectedColumns.push({field: column});      
     }
   }
 
@@ -130,7 +200,9 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
       "filter": $scope.hierOne,
       "value": $scope.name
     };
+
     generateFilter("circle_packing");
+    $scope.tableParams.reload();
   })
 
   //----------------------
@@ -229,23 +301,35 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
         fillColor: 'white'
     });
     layer.bringToFront();
-    $scope.selectedZip = feature.properties.ZCTA5CE10;
   }
+
+  $scope.$watch("selectedZip", function () {
+    $scope.avantData = _.filter($scope.fullAvantData, function(obj){ return obj.zip == $scope.selectedZip; });
+    $scope.tableParams.reload();
+  });  
+
 
 
   //----------------------
 
   $scope.addColumnsParallel = function(column){
     if(column !== ""){
-      $scope.selectedColumns.push(column);      
+      $scope.selectedColumns.push({"field" : column});      
     }
 
     $scope.parallelCoordinate();
   }
 
+  $scope.removeColumn = function(index){
+    $scope.selectedColumns.splice(index, 1);
+    $scope.parallelCoordinate();
+  }
+
   $scope.parallelCoordinate = function(){
 
-    AvantData.query({type: "parallel", "columns[]" : $scope.selectedColumns, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(results){
+    var columns = _.map($scope.selectedColumns, function(obj){ return obj['field']});
+
+    AvantData.query({type: "parallel", "columns[]" : columns, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(results){
       $scope.data = results;
       $scope.parallel_coordinate_options = {
         chart: {
@@ -258,7 +342,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
             bottom: 50,
             left: 10
           },
-          dimensions: $scope.selectedColumns,
+          dimensions: columns,
           dispatch: {
             brush : function(e){
               $scope.$apply(function(){
@@ -283,6 +367,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
   $scope.pieChart = function(){
 
     AvantData.query({type: "pie_chart", column: "age", "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(results){
+      $scope.pieChartColumn = "age";
       $scope.data = results;
     });
 
@@ -309,7 +394,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
   }
 
   $scope.redrawPieChart = function(name){
-    AvantData.query({type: "pie_chart", column: name}, function(results){
+    AvantData.query({type: "pie_chart", column: name, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(results){
       $scope.data = results;
     });
   }
@@ -352,6 +437,88 @@ avantGarde.controller("PackingController", ['$scope', "$resource", function($sco
     };
     
   }
+
+  //-------
+  $scope.scatterPlotChart = function(){
+
+    AvantData.query({type: "scatter_chart", group_by: "sex", "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.scatterPlotX, y: $scope.scatterPlotY, size: $scope.scatterPlotSize}, function(results){
+      $scope.data = results;
+    });
+
+    $scope.scatter_plot_options = {
+      chart: {
+          type: 'scatterChart',
+          height: 800,
+          width: 580,
+          color: d3.scale.category10().range(),
+          scatter: {
+              onlyCircles: false
+          },
+          showDistX: true,
+          showDistY: true,
+          tooltipContent: function(key) {
+              return '<h3>' + key + '</h3>';
+          },
+          transitionDuration: 350,
+          xAxis: {
+              axisLabel: $scope.scatterPlotX,
+              tickFormat: function(d){
+                  return d3.format('.02f')(d);
+              }
+          },
+          yAxis: {
+              axisLabel: $scope.scatterPlotY,
+              tickFormat: function(d){
+                  return d3.format('.02f')(d);
+              },
+              axisLabelDistance: 30
+          }
+      }
+    };
+    
+  }
+
+  //-------
+
+  $scope.motionChart = function(){
+
+    AvantData.get({type: "motion_chart", group_by: $scope.motionChartGroup, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.scatterPlotX, y: $scope.scatterPlotY, size: $scope.scatterPlotSize, time_column : $scope.motionChartTime}, function(results){
+      $scope.chartObject = {};
+
+      $scope.chartObject.type = "MotionChart";
+
+      results['cols'] = [
+        {id: $scope.motionChartGroup, label: $scope.motionChartGroup, type: "string"},
+        {id: "date", label: "Date", type: "date"},
+        {id: $scope.scatterPlotX, label: $scope.scatterPlotX, type: "number"},
+        {id: $scope.scatterPlotY, label: $scope.scatterPlotY, type: "number"},
+        {id: $scope.scatterPlotSize, label: $scope.scatterPlotSize, type: "string"},
+      ]
+
+      $scope.chartObject.data = results;
+    
+    });
+  }
+  // $scope.motionChart = function(){
+  //   AvantData.query({type: "motion_chart", time_column: "date_of_enrollment",  group_by: "sex", "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.scatterPlotX, y: $scope.scatterPlotY, size: $scope.scatterPlotSize}, function(results){
+  //     $scope.data = results;
+
+  //     $scope.motion_chart_options = {
+  //       chart: {
+  //         type: "motionChart",
+  //         height: 550,
+  //         width: 960,
+  //         margin: {
+  //           top: 30,
+  //           right: 10,
+  //           bottom: 10,
+  //           left: 25
+  //         }
+  //       }
+  //     }
+  //   });
+
+  // }
 
 
 

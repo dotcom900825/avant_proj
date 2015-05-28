@@ -2,7 +2,7 @@
   <div class='col-sm-12'>
     <ul style="padding-left: 5px" >
       <li style="display: inline-block; margin-left: 15px" ng-repeat="column in selectedColumns">
-        {{ column }} [<a href ng-click="selectedColumns.splice($index, 1)">X</a>]
+        {{ column.field }} [<a href ng-click="selectedColumns.splice($index, 1)">X</a>]
       </li>
     </ul>
 
@@ -18,7 +18,7 @@
 
 <div class='row'>
   <div class='col-sm-12'>
-    <table class='table'>
+    <!-- <table class='table'>
       <thead>
         <tr>
           <th ng-repeat="column in selectedColumns">{{ column }}</th>
@@ -30,6 +30,19 @@
         </tr>
         <tr ng-repeat="data in avantData | filter: {'zip': selectedZip}">
           <td ng-repeat="column in selectedColumns">{{ data[column]}}</td>
+        </tr>
+      </tbody>
+    </table> -->
+    <table ng-table="tableParams" class="table ng-table-responsive" show-filter="true">
+      <thead>
+        <tr>
+          <th ng-repeat="column in selectedColumns" ng-click="filterTable(column.field)" >{{column.field}}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="obj in $data">
+          <td ng-repeat="column in selectedColumns" sortable="column.field" >{{ obj[column.field]}}</td>
         </tr>
       </tbody>
     </table>

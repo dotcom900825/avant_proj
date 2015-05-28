@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   resources :visualization_paths
 
+  resources :pirc_data do
+    get "all_data", on: :collection
+  end
+
   resources :avant_data do
     get "time_data", on: :collection
     get "circle_packing", on: :collection

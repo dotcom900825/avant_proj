@@ -11642,6 +11642,257 @@ nv.models.ohlcBar = function() {
   return chart;
 }
 
+nv.models.circlePacking = function(){
+  "use strict";
+  //============================================================
+  // Public Variables with Default Settings
+  //------------------------------------------------------------
+
+  var margin = {top: 0, left: 0, right: 0, bottom: 0}
+  , width = 500
+  , height = 500
+  , r = 250
+  , x = d3.scale.linear().range([0, r])
+  , y = d3.scale.linear().range([0, r])
+  , node
+  , root
+  ;
+
+  //------------------------------------------------------------
+
+  function chart(selection){
+    selection.each(function(data) {
+      var availableWidth = width - margin.left - margin.right,
+          availableHeight = height - margin.top - margin.bottom,
+          r = Math.min(availableWidth, availableHeight),
+          container = d3.select(this);
+
+      var pack = d3.layout.pack()
+      .size([r, r])
+      .value(function(d) { return d.size; });
+
+      var vis = container.insert("svg:svg", "h2")
+        .attr("width", availableWidth)
+        .attr("height", availableHeight)
+      .append("svg:g")
+        .attr("transform", "translate(" + (availableWidth - r) / 2 + "," + (availableHeight - r) / 2 + ")");
+
+      node = root = angular.copy(data);
+      var nodes = pack.nodes(node);
+
+      vis.selectAll("circle").remove();
+      vis.selectAll("text").remove();
+
+      vis.selectAll("circle")
+          .data(nodes)
+          .enter().append("svg:circle")
+          .attr("class", function(d) { return d.children ? "parent" : "child"; })
+          .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; })
+          .attr("r", function(d) { return d.r; })
+          .on("click", function(d) { return zoom(node === d ? root : d); });
+
+      vis.selectAll("text")
+          .data(nodes)
+          .enter().append("svg:text")
+          .attr("class", function(d) { return d.children ? "parent" : "child"; })
+          .attr("x", function(d) { return d.x; })
+          .attr("y", function(d) { return d.y; })
+          .attr("dy", ".35em")
+          .attr("text-anchor", "middle")
+          .style("opacity", function(d) {
+            return d.depth === 1 ? 1:0;
+          })
+          .text(function(d) { return d.name; });
+
+      d3.select("circle-packing").on("click", function(){ zoom(root)});
+
+      function zoom(d, i) {
+        var k = r / d.r / 2;
+        x.domain([d.x - d.r, d.x + d.r]);
+        y.domain([d.y - d.r, d.y + d.r]);
+
+        var t = vis.transition()
+            .duration(d3.event.altKey ? 7500 : 750);
+
+        t.selectAll("circle")
+          .attr("cx", function(d) { return x(d.x); })
+          .attr("cy", function(d) { return y(d.y); })
+          .attr("r", function(d) { return k * d.r; });
+
+        t.selectAll("text")
+          .attr("x", function(d) { return x(d.x); })
+          .attr("y", function(d) { return y(d.y); })
+          .style("opacity", function(node) {
+            return node.depth === d.depth + 1 ? 1 : 0;
+          });
+
+        node = d;
+        d3.event.stopPropagation();
+      }
+
+    });
+
+    return chart;
+  }
+
+  return chart;
+}
+
+nv.models.motionChart = function(){
+  "use strict";
+
+   var margin = {top: 30, right: 10, bottom: 10, left: 25}
+    , width = 960
+    , height = 550
+    , x = d3.scale.ordinal()
+    ;
+
+  function chart(selection){
+    selection.each(function(data) {
+
+      var data_values = _.pluck(data, 'values');
+      data_values = _.flatten(data_values);
+
+      var x_range = _.map(data_values, function(obj){ return parseInt(obj.x)});
+      var y_range = _.map(data_values, function(obj){ return parseInt(obj.y)});
+      var time_range = _.map(data_values, function(obj){ return parseInt(obj.time)});
+      var size_range = _.map(data_values, function(obj){ return parseInt(obj.size)});
+
+      var availableWidth = width - margin.left - margin.right,
+      availableHeight = height - margin.top - margin.bottom,
+      r = Math.min(availableWidth, availableHeight),
+      container = d3.select(this);
+
+      var xScale = d3.scale.log().domain([100, 57641180]).range([0, width]),
+          yScale = d3.scale.linear().domain([10, 85]).range([height, 0]),
+          radiusScale = d3.scale.sqrt().domain([0, 1]).range([0, 10]),
+          colorScale = d3.scale.category10();
+
+      // The x & y axes.
+      var xAxis = d3.svg.axis().orient("bottom").scale(xScale),
+          yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+
+      var vis = container.insert("svg:svg", "h2")
+      .attr("width", width)
+      .attr("height", height);
+
+      vis.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(" + margin.left + "," + height + ")")
+      .call(xAxis);
+
+      vis.append("g")
+      .attr("class", "y axis").attr("transform", "translate(" + margin.left + ", 0)")
+      .call(yAxis);
+
+      // Add a y-axis label.
+      vis.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", 6)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("life expectancy (years)");
+
+      // Add the year label; the value is set on transition.
+      var label = vis.append("text")
+          .attr("class", "year label")
+          .attr("text-anchor", "end")
+          .attr("y", height - 24)
+          .attr("x", width)
+          .text(1800);
+
+      var bisect = d3.bisector(function(d) { return d[0]; });
+
+      var dot = vis.append("g")
+        .attr("class", "dots")
+        .selectAll(".dot")
+        .data(interpolateData())
+        .enter().append("circle")
+        .attr("class", "dot")
+        .style("fill", function(d) { return colorScale(color(d)); })
+        .call(position)
+        .sort(order);
+
+      var box = label.node().getBBox();
+
+      var overlay = vis.append("rect")
+        .attr("class", "overlay")
+        .attr("x", box.x)
+        .attr("y", box.y)
+        .attr("width", box.width)
+        .attr("height", box.height)
+        .on("mouseover", enableInteraction);
+
+
+
+      // Start a transition that interpolates the data based on year.
+      vis.transition()
+          .duration(30000)
+          .ease("linear")
+          .tween("year", tweenYear)
+          .each("end", enableInteraction);
+
+      function x(d) { return d.x; }
+      function y(d) { return d.y; }
+      function radius(d) { return d.size; }
+      function color(d) { return d.name; }
+      function key(d) { return d.name; }
+
+      function interpolateData() {
+        var plot_data =  _.map(data, function(d) {
+          return {
+            name: d.name,
+            region: d.name,
+            time: d.values[0].time,
+            x: d.values[0].x,
+            y: d.values[0].y,
+            size: d.values[0].size
+          };
+        });
+
+        plot_data = _.reject(plot_data, function(d){
+          return d.time != time_range[0];
+        })
+
+        return plot_data;
+      }
+
+      function position(dot) {
+        dot.attr("cx", function(d) { return xScale(x(d)); })
+           .attr("cy", function(d) { return yScale(y(d)); })
+           .attr("r", function(d) { return radiusScale(radius(d)); });
+      }
+
+      function order(a, b) {
+        return radius(b) - radius(a);
+      }
+
+      // Tweens the entire chart by first tweening the year, and then the data.
+      // For the interpolated data, the dots and label are redrawn.
+      function tweenYear() {
+        var year = d3.interpolateNumber(1800, 2009);
+        return function(t) { displayYear(year(t)); };
+      }
+
+      // Updates the display to show the specified year.
+      function displayYear(year) {
+        dot.data(interpolateData(year), key).call(position).sort(order);
+        label.text(Math.round(year));
+      }
+
+
+
+    });
+    return chart;
+  }
+
+  return chart;
+}
+
+
 //Code adapted from Jason Davies' "Parallel Coordinates"
 // http://bl.ocks.org/jasondavies/1341281
 
@@ -11701,7 +11952,8 @@ nv.models.parallelCoordinates = function() {
         if (dimension_counts[key].length > max_dimension_size) {max_dimension_size = dimension_counts[key].length};
       })
 
-      height = max_dimension_size * 8;
+      var height = max_dimension_size * 16;
+      console.log(height);
       
       var availableWidth = width - margin.left - margin.right,
           availableHeight = height - margin.top - margin.bottom,
@@ -11777,13 +12029,43 @@ nv.models.parallelCoordinates = function() {
 
       };
 
+      var pc = {};
+
+      pc.toType = function(v) {
+        return ({}).toString.call(v).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+      };
+
+      // try to coerce to number before returning type
+      pc.toTypeCoerceNumbers = function(v) {
+        if ((parseFloat(v) == v) && (v != null)) {
+        return "number";
+      }
+        return pc.toType(v);
+      };
+
+      // attempt to determine types of each dimension based on first row of data
+      pc.detectDimensionTypes = function(data) {
+        var types = {};
+        d3.keys(data[0])
+          .forEach(function(col) {
+            types[col] = pc.toTypeCoerceNumbers(data[0][col]);
+            if (types[col] == "null") {types[col] = "string"};
+          });
+        return types;
+      };
+
+      var types = pc.detectDimensionTypes(data);
+
       // Extract the list of dimensions and create a scale for each.
       dimensions.forEach(function(d) {
         // y[d] = d3.scale.linear()
         //     .domain(d3.extent(data, function(p) { return +p[d]; }))
         //     .range([availableHeight, 0]);
+        var type = types[d];
 
-        y[d] = defaultScale[typeof(d)](d);
+        if (type == "null") { type = "string"};
+
+        y[d] = defaultScale[type](d);
 
         y[d].brush = d3.svg.brush().y(y[d]).on('brush', brush);
 
@@ -11877,9 +12159,22 @@ nv.models.parallelCoordinates = function() {
         });
 
         active = []; //erase current active list
+
+        var within = {
+          "date": function(d,p,dimension) {
+            return extents[dimension][0] <= d[p] && d[p] <= extents[dimension][1]
+          },
+          "number": function(d,p,dimension) {
+            return extents[dimension][0] <= d[p] && d[p] <= extents[dimension][1]
+          },
+          "string": function(d,p,dimension) {
+            return extents[dimension][0] <= y[p](d[p]) && y[p](d[p]) <= extents[dimension][1]
+          }
+        };
+
         foreground.style('display', function(d) {
           var isActive = actives.every(function(p, i) {
-            return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+            return within[types[p]](d, p, i);
           });
           if (isActive) active.push(d);
           return isActive ? null : 'none';
