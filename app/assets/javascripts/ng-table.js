@@ -1,0 +1,1 @@
+//= require ng-table/dist/ng-table

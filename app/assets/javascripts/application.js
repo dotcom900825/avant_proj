@@ -19,7 +19,6 @@
 //= require angular/angular
 //= require angular-resource/angular-resource
 //= require angular-underscore/angular-underscore
-//= require ng-table/dist/ng-table
 //= require nvd3/nv.d3.js
 //= require lodash/dist/lodash.js
 //= require angular-google-maps/dist/angular-google-maps
