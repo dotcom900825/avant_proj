@@ -22,6 +22,6 @@ module Avantgarde
     config.autoload_paths += Dir["#{config.root}/lib/modules/"]
     config.assets.paths << Rails.root.join("vendor","assets","bower_components")
 
-    config.assets.precompile += %w(leaflet.js leaflet-directive.js d3_related.js angular_nvd3.js nvd3.js angular-google-map.js circle-packing.js ng-table.js)
+    config.assets.precompile += %w(leaflet.js leaflet-directive.js d3_related.js angular_nvd3.js nvd3.js angular-google-map.js circle-packing.js ng-table.js google_chart.js)
   end
 end

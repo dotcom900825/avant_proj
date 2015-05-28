@@ -1,0 +1,1 @@
+//= require angular-google-chart/ng-google-chart
