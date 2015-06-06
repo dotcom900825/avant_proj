@@ -28,8 +28,13 @@ avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "N
   $scope.scatterPlotX = "current_hiv_load";
   $scope.scatterPlotY = "age";
   $scope.scatterPlotSize = "number_of_partners";
+
   $scope.motionChartTime = "date_of_enrollment";
   $scope.motionChartGroup = "sex";
+  $scope.motionChartX = "current_hiv_load";
+  $scope.motionChartY = "age";
+  $scope.motionChartSize = "number_of_partners";
+
 
   
 
@@ -482,21 +487,34 @@ avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "N
 
   $scope.motionChart = function(){
 
-    AvantData.get({type: "motion_chart", group_by: $scope.motionChartGroup, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.scatterPlotX, y: $scope.scatterPlotY, size: $scope.scatterPlotSize, time_column : $scope.motionChartTime}, function(results){
+    AvantData.get({type: "motion_chart", group_by: $scope.motionChartGroup, "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.motionChartX, y: $scope.motionChartY, size: $scope.motionChartSize, time_column : $scope.motionChartTime}, function(results){
       $scope.chartObject = {};
 
       $scope.chartObject.type = "MotionChart";
-
-      results['cols'] = [
+      var motion_chart_res = results.motion_chart;
+      motion_chart_res['cols'] = [
         {id: $scope.motionChartGroup, label: $scope.motionChartGroup, type: "string"},
         {id: "date", label: "Date", type: "date"},
-        {id: $scope.scatterPlotX, label: $scope.scatterPlotX, type: "number"},
-        {id: $scope.scatterPlotY, label: $scope.scatterPlotY, type: "number"},
-        {id: $scope.scatterPlotSize, label: $scope.scatterPlotSize, type: "string"},
-      ]
+        {id: $scope.motionChartX, label: $scope.motionChartX, type: "number"},
+        {id: $scope.motionChartY, label: $scope.motionChartY, type: "number"},
+        {id: $scope.motionChartSize, label: $scope.motionChartSize, type: "number"},
+      ];
 
-      $scope.chartObject.data = results;
-    
+      $scope.chartObject.data = motion_chart_res;
+
+
+      var timeline_chart_res = results.timeline_chart;
+      timeline_chart_res['cols'] = [
+        { type: 'string', id: 'President' },
+        { type: 'date', id: 'Start' },
+        { type: 'date', id: 'End' }
+      ];
+
+
+      $scope.timelineChartObject = {};
+      $scope.timelineChartObject.type = "Timeline";
+      $scope.timelineChartObject.data = timeline_chart_res;
+        
     });
   }
   // $scope.motionChart = function(){

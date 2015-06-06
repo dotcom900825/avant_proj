@@ -66,3 +66,27 @@
     <button ng-click="scatterPlotChart()" class='btn btn-primary'>Redraw</button>
   </div>
 </div>
+
+<div ng-show="checkCurrentPath('motion_chart')">
+  <div class='row'>
+    <div class='col-xs-12'>
+      <label>Group by: </label>
+      <select id="column" ng-model="motionChartGroup" ng-options="name for name in columns"></select>
+      <br>
+
+      <label>X Axis: </label>
+      <select id="column" ng-model="motionChartX" ng-options="name for name in columns"></select>
+      <br>
+
+      <label>Y Axis: </label>
+      <select id="column" ng-model="motionChartY" ng-options="name for name in columns"></select>
+
+      <br>
+
+      <label>Sized by: </label>
+      <select id="column" ng-model="motionChartSize" ng-options="name for name in columns"></select>
+
+    </div>
+    <button ng-click="motionChart()" class='btn btn-primary'>Redraw</button>
+  </div>
+</div>
