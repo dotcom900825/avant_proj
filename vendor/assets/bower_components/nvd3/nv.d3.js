@@ -11739,6 +11739,135 @@ nv.models.circlePacking = function(){
   return chart;
 }
 
+nv.models.graphChart = function(){
+  var margin = {top: 10, right: 10, bottom: 10, left: 25}
+  , width = 1080
+  , height = 1080;
+
+  function chart(selection){
+    selection.each(function(data){
+      
+
+      if (data.nodes) {
+        colors = [];
+        var z = 0;
+        while (z < data.nodes.length){
+          var letters = '0123456789ABCDEF'.split('');
+          var color = '#';
+          for (var i = 0; i < 6; i++ ) {
+              color += letters[Math.floor(Math.random() * 16)];
+          }
+          colors.push(color);
+          z += 1;
+        }
+        var color = d3.scale.ordinal().domain(_.map(data.nodes, function(d){return d.cluster})).range(colors);
+        
+        var force = d3.layout.force().charge(-60).linkDistance(30).size([width, height]);
+
+        container = d3.select(this);
+        container.insert("svg").attr("width", width).attr("height", height);
+        
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function (d) {
+            return  "cluser id: " + d.cluster + "";
+        })
+        container.call(tip);
+
+        var links = [];
+
+        data.nodes.forEach(function(ele, index){
+          if (index < data.nodes.length - 1 && ele.cluster == data.nodes[index+1].cluster) {
+            links.push({"source" : index, "target" : index + 1, "value" : 1});
+          };
+        });
+
+        force.nodes(data.nodes).links(links).start();
+
+        var link = container.selectAll(".link")
+          .data(links)
+          .enter().append("line")
+          .attr("class", "link")
+          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+        var node = container.selectAll(".node")
+          .data(data.nodes)
+          .enter().append('g')
+          .attr("class", "node")
+          .call(force.drag)
+          .on('mouseover', tip.show) //Added
+          .on('mouseout', tip.hide); //Added 
+
+        node.append("circle")
+        .attr("r", 5)
+        .style("fill", function(d) { return color(d.cluster); })
+
+
+        node.append("text")
+        .attr("dx", 10)
+        .attr("dy", ".35em")
+        .text(function(d) { return d.name })
+        .style("stroke", "gray");
+
+        force.on("tick", function(){
+          link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+          container.selectAll('circle').attr("cx", function(d) { return d.x; })
+              .attr("cy", function(d) { return d.y; });
+
+          container.selectAll("text").attr("x", function (d) {
+            return d.x;
+          })
+          .attr("y", function (d) {
+            return d.y;
+          });
+          
+          container.selectAll("circle").each(collide(0.5));
+        })
+
+        var padding = 1, // separation between circles
+            radius=8;
+
+        function collide(alpha) {
+          var quadtree = d3.geom.quadtree(data.nodes);
+          return function(d) {
+            var rb = 2*radius + padding,
+                nx1 = d.x - rb,
+                nx2 = d.x + rb,
+                ny1 = d.y - rb,
+                ny2 = d.y + rb;
+            quadtree.visit(function(quad, x1, y1, x2, y2) {
+              if (quad.point && (quad.point !== d)) {
+                var x = d.x - quad.point.x,
+                    y = d.y - quad.point.y,
+                    l = Math.sqrt(x * x + y * y);
+                  if (l < rb) {
+                  l = (l - rb) / l * alpha;
+                  d.x -= x *= l;
+                  d.y -= y *= l;
+                  quad.point.x += x;
+                  quad.point.y += y;
+                }
+              }
+              return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            });
+          };
+        }
+
+
+        return chart;
+
+      };
+    })
+  }
+
+  return chart;
+}
+
 nv.models.motionChart = function(){
   "use strict";
 

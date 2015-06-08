@@ -77,6 +77,13 @@ class AvantDataController < ApplicationController
         format.json {render template: "avant_data/motion_chart"}
       end
 
+    when "graph"
+      @data = SdtjDemo.where.not(:cluster_id=>nil).order("cluster_id DESC")
+      @data = @data.where(params[:filters].first.to_sym=>params[:filter_values].first) if params[:filter_values] && params[:filter_values].first.present? && params[:filter_values].first != "undefined"
+      respond_to do |format|
+        format.json {render template: "avant_data/graph"}
+      end
+
     else
       @data = SdtjDemo.all
       @data = SdtjDemo.all.where(params[:filterBy].to_sym=>params[:value]) if params[:filterBy].present? && params[:value].present?

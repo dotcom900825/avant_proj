@@ -49,6 +49,14 @@
               </a>
             </div>
 
+             <div class="col-xs-6 col-sm-6">
+              <a ng-click="switchVisualization('graph_chart')" href="#" class="thumbnail">
+                <%= image_tag "force_directed_graph.png"%>
+                Graph Chart
+              </a>
+            </div>
+
+
             </div>
           </div>
         </li>
@@ -68,8 +76,6 @@
 
 <div class='row'>
   <div class='col-xs-4'>
-    Filters: {{ pathData }}
-    <hr>
     Current visualiation: {{currentPath}}
     <hr>
     {{ filters }}

@@ -9,7 +9,7 @@
 
       <hr>
 
-      <circle-packing ng-show="checkCurrentPath('circle_packing')" nodes='nodes' width='500' height='400' radius='390' id="pack_chart" name='name' children='children'></circle-packing>
+      <circle-packing ng-show="checkCurrentPath('circle_packing')" nodes='nodes' width='500' height='500' radius='500' id="pack_chart" name='name' children='children'></circle-packing>
 
       <nvd3 id="parallel_coordinate" ng-show="checkCurrentPath('parallel_coordinate')"  options="parallel_coordinate_options" data="data"></nvd3>
 
@@ -17,18 +17,20 @@
 
       <nvd3 id="scatter_plot" ng-show="checkCurrentPath('scatter_plot')" options="scatter_plot_options" data="data"></nvd3>
 
+      <nvd3 id="graph" ng-show="checkCurrentPath('graph_chart')" options="graph_options" data="data"></nvd3>
+
       <div google-chart ng-show="checkCurrentPath('motion_chart')" chart="chartObject" style="height:300px; width:100%;"></div>
 
       <div google-chart ng-show="checkCurrentPath('motion_chart')" chart="timelineChartObject" style="width:100%;"></div>
       
     </div>
 
-    <div id="map_canvas" class='col-md-6'>
+    <div id="map_canvas" class='col-md-6' ng-hide="checkCurrentPath('graph_chart')">
 
-    <div class="info country f32">
-        <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
-        <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
-    </div>
+      <div class="info country f32">
+          <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
+          <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
+      </div>
 
       <leaflet center="center" events="events" legend="legend" geojson="geojson" width="500" height="400"></leaflet>
     </div>

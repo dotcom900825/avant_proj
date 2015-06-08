@@ -106,6 +106,13 @@ avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "N
       $scope.visualPath.push("motion_chart");
       $scope.motionChart();
     };
+
+    if (name == 'graph_chart') {
+      $scope.currentPath = "graph_chart";
+      $scope.visualPath.push("graph_chart");
+      $scope.graphChart();
+
+    };
   }
 
   $scope.tableParams = new NgTableParams({
@@ -516,6 +523,19 @@ avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "N
       $scope.timelineChartObject.data = timeline_chart_res;
         
     });
+  }
+
+  $scope.graphChart = function(){
+    AvantData.get({type: "graph", "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name]}, function(data){
+      $scope.data = data;
+    });
+    $scope.graph_options = {
+      chart: {
+          type: 'graphChart',
+          height: 1180,
+          width: 1080
+      }
+    };
   }
   // $scope.motionChart = function(){
   //   AvantData.query({type: "motion_chart", time_column: "date_of_enrollment",  group_by: "sex", "filters[]" : [$scope.hierOne], "filter_values[]" : [$scope.name], x: $scope.scatterPlotX, y: $scope.scatterPlotY, size: $scope.scatterPlotSize}, function(results){

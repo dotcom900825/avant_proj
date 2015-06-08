@@ -12,6 +12,7 @@
   <%= render "shared/navbar"%>
   <%= yield %>
   <%= javascript_include_tag 'application' if @use_js%>
+  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
   <%= javascript_include_tag 'nvd3' if @use_js%>
   <%= javascript_include_tag 'angular_nvd3' if @use_js%>
   <%= javascript_include_tag 'angular-google-map' if @use_js%>

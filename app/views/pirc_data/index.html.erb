@@ -19,10 +19,10 @@
 
     <div id="map_canvas" class='col-md-6'>
 
-    <div class="info country f32">
-        <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
-        <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
-    </div>
+      <div class="info country f32">
+          <div ng-show="selectedZip" class="flag" ng-class="lowercase"></div>
+          <h6 style="font-size:20px; margin:5px;">{{ selectedZip || 'No zipcode selected'}} : {{ zip_hash[selectedZip]}}</h6>
+      </div>
 
       <leaflet center="center" events="events" legend="legend" geojson="geojson" width="500" height="400"></leaflet>
     </div>
