@@ -15,24 +15,8 @@ Rails.application.routes.draw do
   end
 
   resources :avant_data do
-    get "time_data", on: :collection
-    get "circle_packing", on: :collection
-    get "pie_chart", on: :collection
-    get "address", on: :collection
-    get "bar_hierarchy", on: :collection
-    get "zip", on: :collection
-    get "three_digit_zip", on: :collection
-    get "parallel", on: :collection
-    get "cluster", on: :collection
-    get "flexible_cluster", on: :collection
     get "all_data", on: :collection
-    post "map_polylines", on: :collection
-    get "scatter_chart", on: :collection
-    get "demo_data", on: :collection
-
     get "geojson", on: :collection
-    get "all", on: :collection
-    get "geojson_example", on: :collection
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

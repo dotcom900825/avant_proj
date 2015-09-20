@@ -15,7 +15,7 @@ avantGarde.controller("PackingController", ['$scope', "$resource", "$filter", "N
 
   };
 
-  var environment = "production";
+  var environment = "development";
   $scope.avantData = [];
   $scope.fullAvantData = [];
 

@@ -11,7 +11,83 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222203548) do
+ActiveRecord::Schema.define(version: 20150512160811) do
+
+  create_table "AEH_Roster", primary_key: "pid", force: true do |t|
+  end
+
+  create_table "Bio", primary_key: "pid", force: true do |t|
+    t.date    "collect_date"
+    t.text    "aliases"
+    t.date    "birth_date"
+    t.string  "first_name",     limit: 100
+    t.string  "last_name",      limit: 100
+    t.string  "middle_initial", limit: 5
+    t.string  "suffix",         limit: 10
+    t.integer "not_done"
+  end
+
+  create_table "Contact", primary_key: "pid", force: true do |t|
+    t.date    "collect_date"
+    t.string  "city",                limit: 100
+    t.string  "email1",              limit: 100
+    t.string  "email2",              limit: 100
+    t.string  "phone1",              limit: 25
+    t.integer "phone1_secure"
+    t.string  "phone2",              limit: 25
+    t.integer "phone2_secure"
+    t.integer "phonetype1"
+    t.integer "phonetype2"
+    t.string  "state_province",      limit: 100
+    t.string  "street_address_1",    limit: 100
+    t.string  "street_address_2",    limit: 100
+    t.integer "study_opportunities"
+    t.integer "testing_reminder"
+    t.string  "zip_code",            limit: 10
+    t.integer "not_done"
+  end
+
+  create_table "ET_AEH_Map", id: false, force: true do |t|
+    t.string "RedCrossID", limit: 10, default: "", null: false
+    t.string "pid",        limit: 6,  default: "", null: false
+  end
+
+  add_index "et_aeh_map", ["pid"], name: "pid", using: :btree
+
+  create_table "ET_DetunedEIA", primary_key: "RedCrossID", force: true do |t|
+    t.date    "collect_date"
+    t.float   "result",       limit: 53
+    t.integer "test_kit"
+    t.integer "test_source"
+    t.integer "not_done"
+  end
+
+  create_table "ET_NAT", primary_key: "RedCrossID", force: true do |t|
+    t.integer "hbv_result"
+    t.integer "hcv_result"
+    t.integer "hiv_result"
+    t.integer "nat_result"
+    t.integer "not_done"
+  end
+
+  create_table "ET_RapidTest", primary_key: "RedCrossID", force: true do |t|
+    t.date    "collect_date"
+    t.string  "comments",        limit: 45
+    t.integer "rapid2"
+    t.integer "rapid2_test_kit"
+    t.integer "result"
+    t.integer "test_kit"
+    t.integer "test_source"
+    t.integer "not_done"
+  end
+
+  create_table "ET_Roster", primary_key: "RedCrossID", force: true do |t|
+  end
+
+  create_table "PHI", id: false, force: true do |t|
+    t.string "tableName", limit: 45, default: "", null: false
+    t.string "fieldName", limit: 45, default: "", null: false
+  end
 
   create_table "avant_data", force: true do |t|
     t.string   "subject_identification"
@@ -112,7 +188,7 @@ ActiveRecord::Schema.define(version: 20150222203548) do
     t.string   "edi_date"
     t.string   "zip"
     t.string   "date_of_sequence"
-    t.date     "date_of_enrollment",                         limit: 255
+    t.date     "date_of_enrollment"
     t.string   "race"
     t.string   "ethnicity"
     t.string   "marital_status"
@@ -214,9 +290,9 @@ ActiveRecord::Schema.define(version: 20150222203548) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                           null: false
-    t.string   "crypted_password",                null: false
-    t.string   "salt",                            null: false
+    t.string   "email",                                       null: false
+    t.string   "crypted_password",                            null: false
+    t.string   "salt",                                        null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_me_token"
@@ -225,10 +301,29 @@ ActiveRecord::Schema.define(version: 20150222203548) do
     t.datetime "reset_password_token_expires_at"
     t.datetime "reset_password_email_sent_at"
     t.string   "username"
+    t.integer  "phi_role",                        default: 0
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token"
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
+
+  create_table "visualization_paths", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "filter"
+    t.text     "path"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "wifi_data", force: true do |t|
+    t.float   "time",        limit: 24
+    t.string  "source"
+    t.string  "destination"
+    t.string  "protocol"
+    t.integer "length"
+    t.text    "info"
+  end
 
 end

@@ -11,17 +11,16 @@
 <body ng-app="avantGarde">
   <%= render "shared/navbar"%>
   <%= yield %>
-  <%= javascript_include_tag 'application' if @use_js%>
+  <%= javascript_include_tag 'application' %>
   <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
-  <%= javascript_include_tag 'nvd3' if @use_js%>
-  <%= javascript_include_tag 'angular_nvd3' if @use_js%>
-  <%= javascript_include_tag 'angular-google-map' if @use_js%>
-  <%= javascript_include_tag 'circle-packing' if @use_js%>
-  <%= javascript_include_tag 'leaflet' if @use_js%>
-  <%= javascript_include_tag 'leaflet-directive' if @use_js%>
-  <%= javascript_include_tag 'ng-table' if @use_js%>
-  <%= javascript_include_tag 'd3_related' if @use_js%>
-  <%= javascript_include_tag "google_chart" if @use_js%>
+  <%= javascript_include_tag 'nvd3' %>
+  <%= javascript_include_tag 'angular_nvd3' %>
+  <%= javascript_include_tag 'circle-packing' %>
+  <%= javascript_include_tag 'leaflet' %>
+  <%= javascript_include_tag 'leaflet-directive' %>
+  <%= javascript_include_tag 'ng-table' %>
+  <%= javascript_include_tag 'd3_related' %>
+  <%= javascript_include_tag "google_chart" %>
   <%= yield :footer_scripts %>
 </body>
 
