@@ -30,7 +30,7 @@ gem 'spring',        group: :development
 
 gem "rails-backbone"
 
-gem "rails_admin", "~> 0.6.5"
+gem "rails_admin", "~> 1.4.3"
 
 gem "cancancan"
 
